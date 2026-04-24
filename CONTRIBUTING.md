@@ -1,5 +1,9 @@
 # Contributing
 
+<p align="center">
+	<img src="assets/branding/polymath_global.png" alt="Polymath Global logo" width="240">
+</p>
+
 ## Development setup
 
 From `projects/calamum/`:

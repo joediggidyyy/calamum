@@ -1,5 +1,9 @@
 # Security policy
 
+<p align="center">
+	<img src="assets/branding/calamum_logo_color.png" alt="Calamum logo" width="220">
+</p>
+
 `Calamum Test` treats retained evidence and privileged aggregate generation as security-relevant surfaces.
 
 ## Reporting a vulnerability

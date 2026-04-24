@@ -1,5 +1,9 @@
 # Calamum Test
 
+<p align="center">
+	<img src="assets/branding/calamum_logo_color.png" alt="Calamum logo" width="360">
+</p>
+
 `Calamum Test` is a standalone, project-aware testing substrate for consolidating `pytest`, `sandbox_test`, and `empirical_test` lanes behind one retained-evidence CLI and Python facade.
 
 Public repository: `https://github.com/joediggidyyy/calamum`
