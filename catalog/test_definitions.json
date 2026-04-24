@@ -1,0 +1,196 @@
+{
+  "schema_version": "calamum-test-catalog-v2",
+  "definitions": [
+    {
+      "id": "seed-cli-smoke",
+      "title": "Seed CLI smoke definition",
+      "summary": "Token-aware smoke definition that proves the Calamum command surface, project resolution, and retained-run evidence contract are wired correctly.",
+      "status": "active",
+      "category": "bootstrap",
+      "selector_policy": "exact-name-only",
+      "profiles": [
+        "default",
+        "smoke"
+      ],
+      "tags": [
+        "cli",
+        "project",
+        "retained-evidence"
+      ],
+      "policy_flags": [
+        "json-first",
+        "project-aware"
+      ],
+      "evidence_requirements": [
+        "report_json",
+        "report_md",
+        "manifest_json",
+        "checksums_json"
+      ],
+      "default_lanes": [
+        "pytest",
+        "sandbox_test",
+        "empirical_test"
+      ],
+      "metadata": {
+        "intent": "bootstrap-smoke"
+      },
+      "lanes": {
+        "pytest": [
+          {
+            "id": "seed-pytest-placeholder",
+            "title": "Seed pytest placeholder",
+            "cwd": "{working_dir}",
+            "command": [
+              "{python}",
+              "-c",
+              "print('seed pytest placeholder for {project_id}')"
+            ],
+            "expected_artifacts": [
+              "stdout"
+            ],
+            "evidence_requirements": [
+              "stdout_capture"
+            ]
+          }
+        ],
+        "sandbox_test": [
+          {
+            "id": "seed-sandbox-placeholder",
+            "title": "Seed sandbox placeholder",
+            "cwd": "{working_dir}",
+            "command": [
+              "{python}",
+              "-c",
+              "print(r'seed sandbox placeholder under {project_root}')"
+            ],
+            "expected_artifacts": [
+              "stdout"
+            ],
+            "evidence_requirements": [
+              "stdout_capture"
+            ]
+          }
+        ],
+        "empirical_test": [
+          {
+            "id": "seed-empirical-placeholder",
+            "title": "Seed empirical placeholder",
+            "cwd": "{working_dir}",
+            "command": [
+              "{python}",
+              "-c",
+              "print('seed empirical placeholder for {project_name}')"
+            ],
+            "expected_artifacts": [
+              "stdout"
+            ],
+            "evidence_requirements": [
+              "stdout_capture"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "seed-adversarial-smoke",
+      "title": "Seed adversarial smoke definition",
+      "summary": "Harmless placeholder definition reserved for hostile-input and penetration-style validation flows across the canonical Calamum lanes.",
+      "status": "active",
+      "category": "adversarial",
+      "selector_policy": "exact-name-only",
+      "profiles": [
+        "default",
+        "smoke",
+        "release"
+      ],
+      "tags": [
+        "adversarial",
+        "cli",
+        "sandbox"
+      ],
+      "policy_flags": [
+        "containment",
+        "json-first",
+        "project-aware",
+        "release-gate"
+      ],
+      "evidence_requirements": [
+        "report_json",
+        "report_md",
+        "manifest_json",
+        "checksums_json"
+      ],
+      "default_lanes": [
+        "pytest",
+        "sandbox_test",
+        "empirical_test"
+      ],
+      "metadata": {
+        "intent": "adversarial-smoke"
+      },
+      "lanes": {
+        "pytest": [
+          {
+            "id": "seed-adversarial-pytest-placeholder",
+            "title": "Seed adversarial pytest placeholder",
+            "cwd": "{working_dir}",
+            "command": [
+              "{python}",
+              "-c",
+              "print('seed adversarial pytest placeholder for {project_id}')"
+            ],
+            "expected_artifacts": [
+              "stdout"
+            ],
+            "evidence_requirements": [
+              "stdout_capture"
+            ],
+            "policy_flags": [
+              "containment"
+            ]
+          }
+        ],
+        "sandbox_test": [
+          {
+            "id": "seed-adversarial-sandbox-placeholder",
+            "title": "Seed adversarial sandbox placeholder",
+            "cwd": "{working_dir}",
+            "command": [
+              "{python}",
+              "-c",
+              "print(r'seed adversarial sandbox probe inside {project_root}')"
+            ],
+            "expected_artifacts": [
+              "stdout"
+            ],
+            "evidence_requirements": [
+              "stdout_capture"
+            ],
+            "policy_flags": [
+              "containment"
+            ]
+          }
+        ],
+        "empirical_test": [
+          {
+            "id": "seed-adversarial-empirical-placeholder",
+            "title": "Seed adversarial empirical placeholder",
+            "cwd": "{working_dir}",
+            "command": [
+              "{python}",
+              "-c",
+              "print('seed adversarial empirical review for {project_name}')"
+            ],
+            "expected_artifacts": [
+              "stdout"
+            ],
+            "evidence_requirements": [
+              "stdout_capture"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

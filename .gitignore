@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+build/
+dist/
+*.egg-info/
+.calamum/generated/*
+!.calamum/generated/.gitignore
+runs/
+reports/
+.venv/
+planning/
+.env
+.agent_session/
+logs/
+codesentinel.log
