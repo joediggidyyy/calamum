@@ -8,6 +8,7 @@ from .layout import (
     style_choice_label,
     style_decision_value,
     style_heading,
+    yes_no_text,
 )
 
 
@@ -358,6 +359,45 @@ def render_project_validation(validation: Dict[str, Any]) -> List[str]:
                 if isinstance(item, dict)
             ],
             indent="  ",
+        ),
+    )
+    return lines
+
+
+def render_monitor_capability_list(packet: Dict[str, Any]) -> List[str]:
+    project_value = packet.get("project", {}) if isinstance(packet.get("project", {}), dict) else {}
+    project_id = ""
+    if isinstance(project_value, dict):
+        project_id = str(project_value.get("project_id", "") or project_value.get("name", "")).strip()
+    lines = _render_header(
+        "Calamum monitor capability",
+        packet,
+        summary="Current monitor-shell scaffold and adapter posture.",
+    )
+    append_human_section(
+        lines,
+        "Summary",
+        render_human_kv_rows(
+            [
+                ("Monitor surface", packet.get("monitor_surface_status", "")),
+                ("Project", project_id or "none resolved"),
+                ("Project context resolved", yes_no_text(packet.get("project_context_resolved", False))),
+                ("JSON noninteractive", yes_no_text(packet.get("json_noninteractive", False))),
+                ("Platform", packet.get("platform", "")),
+            ]
+        ),
+    )
+    adapters = packet.get("adapters", {}) if isinstance(packet.get("adapters", {}), dict) else {}
+    if adapters:
+        append_human_section(lines, "Adapters", render_human_kv_rows(sorted(adapters.items()), indent="  "))
+    append_human_section(
+        lines,
+        "Runtime signals",
+        render_human_kv_rows(
+            [
+                ("PyShark installed", yes_no_text(packet.get("pyshark_installed", False))),
+                ("Canonical root commands", _comma_list(packet.get("canonical_root_commands", []))),
+            ]
         ),
     )
     return lines

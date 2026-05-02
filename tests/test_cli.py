@@ -32,7 +32,20 @@ def test_root_help_is_grouped(capsys):
     assert exc_info.value.code == 0
     assert "[Commands]" in captured.out
     assert "[Examples]" in captured.out
-    assert "calamum test project current" in captured.out
+    assert "calamum project current" in captured.out
+    assert "monitor" in captured.out
+    assert "project" in captured.out
+    assert "--version" in captured.out
+
+
+def test_version_flag_reports_version(capsys):
+    with pytest.raises(SystemExit) as exc_info:
+        main(["--version"])
+
+    captured = capsys.readouterr()
+
+    assert exc_info.value.code == 0
+    assert captured.out.strip() == "calamum 0.3.0"
 
 
 @pytest.mark.parametrize(
@@ -42,6 +55,9 @@ def test_root_help_is_grouped(capsys):
         (["test", "runs", "-h"], "[Inspection]"),
         (["test", "project", "-h"], "[Registration]"),
         (["test", "reports", "-h"], "[Generation]"),
+        (["project", "-h"], "[Registration]"),
+        (["monitor", "-h"], "[Inspection]"),
+        (["monitor", "capability", "-h"], "[Inspection]"),
     ],
 )
 def test_parent_help_pages_are_grouped(argv, expected_heading, capsys):
@@ -223,7 +239,6 @@ def test_project_register_and_current_via_cli(tmp_path, monkeypatch, capsys):
 
     exit_code = main(
         [
-            "test",
             "project",
             "register",
             "--id",
@@ -253,17 +268,22 @@ def test_project_register_and_current_via_cli(tmp_path, monkeypatch, capsys):
     assert payload["project"]["runs_root"] == ".calamum/generated/runs"
     assert payload["project"]["reports_root"] == ".calamum/generated/reports"
 
-    exit_code = main(["test", "project", "current", "--config-root", str(config_root), "--json"])
+    exit_code = main(["project", "current", "--config-root", str(config_root), "--json"])
     payload = json.loads(capsys.readouterr().out)
     assert exit_code == EXIT_OK
     assert payload["project"]["project_id"] == "cli-project"
 
-    exit_code = main(["test", "project", "current", "--config-root", str(config_root)])
+    exit_code = main(["project", "current", "--config-root", str(config_root)])
     captured = capsys.readouterr()
     assert exit_code == EXIT_OK
     assert "Calamum project context" in captured.out
     assert "Paths" in captured.out
     assert "Runtime contract" in captured.out
+
+    exit_code = main(["test", "project", "current", "--config-root", str(config_root), "--json"])
+    payload = json.loads(capsys.readouterr().out)
+    assert exit_code == EXIT_OK
+    assert payload["project"]["project_id"] == "cli-project"
 
 
 def test_project_register_interactive(tmp_path, monkeypatch, capsys):
@@ -281,7 +301,6 @@ def test_project_register_interactive(tmp_path, monkeypatch, capsys):
 
     exit_code = main(
         [
-            "test",
             "project",
             "register",
             "--interactive",
@@ -294,6 +313,24 @@ def test_project_register_interactive(tmp_path, monkeypatch, capsys):
     assert exit_code == EXIT_OK
     assert payload["decision"] == "go"
     assert payload["project"]["project_id"] == "interactive-project"
+
+
+def test_monitor_capability_list_human_and_json(capsys):
+    exit_code = main(["monitor", "capability", "list", "--json"])
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == EXIT_OK
+    assert payload["decision"] == "go"
+    assert payload["monitor_surface_status"] == "scaffolded"
+    assert payload["json_noninteractive"] is True
+    assert "monitor" in payload["canonical_root_commands"]
+
+    exit_code = main(["monitor", "capability", "list"])
+    captured = capsys.readouterr()
+    assert exit_code == EXIT_OK
+    assert "Calamum monitor capability" in captured.out
+    assert "Adapters" in captured.out
+    assert "Runtime signals" in captured.out
 
 
 def test_human_no_go_output_is_sectioned(capsys):

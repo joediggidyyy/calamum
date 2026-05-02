@@ -2,9 +2,11 @@ import json
 import os
 import subprocess
 import sys
+import threading
+import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from .catalog import CANONICAL_TEST_LANES, CommandType, default_runs_root
 from .layout import default_catalog_root as layout_default_catalog_root
@@ -14,8 +16,86 @@ from .render import render_markdown_report
 from .signing import write_checksum_sidecar
 
 
+HEARTBEAT_INTERVAL_SEC = 20
+
+
 class RunError(RuntimeError):
     """Raised when a run cannot be completed."""
+
+
+def _emit_heartbeat(msg: str) -> None:
+    """Write a single heartbeat line to stderr; monkeypatchable for tests."""
+    sys.stderr.write(msg + "\n")
+    sys.stderr.flush()
+
+
+def _drain_pipe(pipe: Any, chunks: List[str], dest_path: Path) -> None:
+    """Drain a text pipe line-by-line, accumulating into *chunks* and writing to *dest_path*."""
+    try:
+        with dest_path.open("w", encoding="utf-8", errors="replace") as fh:
+            for line in pipe:
+                chunks.append(line)
+                fh.write(line)
+    except Exception:  # pragma: no cover - I/O failure during drain
+        pass
+
+
+def _supervise_step(
+    command: Any,
+    cwd: Path,
+    env: Dict[str, str],
+    stdout_path: Path,
+    stderr_path: Path,
+    shell: bool,
+    run_id: str,
+    lane: str,
+    step_id: str,
+    cwd_ref: str = "",
+    heartbeat_interval: int = HEARTBEAT_INTERVAL_SEC,
+) -> Tuple[int, str, str]:
+    """Spawn *command* with Popen, drain stdout/stderr to files and in-memory, emit heartbeats."""
+    proc = subprocess.Popen(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        shell=shell,
+        cwd=str(cwd),
+        env=env,
+    )
+    stdout_chunks: List[str] = []
+    stderr_chunks: List[str] = []
+    stdout_thread = threading.Thread(
+        target=_drain_pipe, args=(proc.stdout, stdout_chunks, stdout_path), daemon=True
+    )
+    stderr_thread = threading.Thread(
+        target=_drain_pipe, args=(proc.stderr, stderr_chunks, stderr_path), daemon=True
+    )
+    stdout_thread.start()
+    stderr_thread.start()
+    start_time = time.monotonic()
+    last_heartbeat_time = start_time
+    try:
+        while proc.poll() is None:
+            now = time.monotonic()
+            if now - last_heartbeat_time >= heartbeat_interval:
+                elapsed = now - start_time
+                safe_cwd = cwd_ref or Path(str(cwd)).name
+                _emit_heartbeat(
+                    "[calamum heartbeat] run={0} lane={1} step={2}"
+                    " elapsed={3:.0f}s interval={4}s cwd={5}".format(
+                        run_id, lane, step_id, elapsed, heartbeat_interval, safe_cwd
+                    )
+                )
+                last_heartbeat_time = now
+            time.sleep(0.5)
+    finally:
+        stdout_thread.join()
+        stderr_thread.join()
+    returncode = proc.returncode if proc.returncode is not None else proc.wait()
+    return returncode, "".join(stdout_chunks), "".join(stderr_chunks)
 
 
 def run_definition(
@@ -48,6 +128,7 @@ def run_definition(
             dry_run=dry_run,
             project_context=project_context,
             runtime_tokens=runtime_tokens,
+            _run_id=run_id,
         )
         lane_reports.append(lane_report)
         lane_result = str(lane_report.get("result", "unknown"))
@@ -167,6 +248,7 @@ def run_lane(
     dry_run: bool,
     project_context: Optional[ResolvedProject] = None,
     runtime_tokens: Optional[Dict[str, str]] = None,
+    _run_id: str = "",
 ) -> Dict[str, Any]:
     lane_dir.mkdir(parents=True, exist_ok=True)
     normalized_steps = list(steps)
@@ -182,6 +264,8 @@ def run_lane(
             dry_run=dry_run,
             project_context=project_context,
             runtime_tokens=runtime_tokens,
+            _run_id=_run_id,
+            _lane=lane_name,
         )
         results.append(result)
         if result.get("result") == "failed":
@@ -198,6 +282,8 @@ def run_step(
     dry_run: bool,
     project_context: Optional[ResolvedProject] = None,
     runtime_tokens: Optional[Dict[str, str]] = None,
+    _run_id: str = "",
+    _lane: str = "",
 ) -> Dict[str, Any]:
     step_id = str(step.get("id", "step")).strip() or "step"
     title = str(step.get("title", step_id)).strip() or step_id
@@ -225,23 +311,22 @@ def run_step(
             "stderr_path": str(stderr_path),
         }
 
-    completed = subprocess.run(
-        command,
-        capture_output=True,
-        text=True,
-        shell=bool(step.get("shell", False)) or isinstance(command, str),
-        cwd=str(cwd_path),
+    returncode, stdout_text, stderr_text = _supervise_step(
+        command=command,
+        cwd=cwd_path,
         env=env_payload,
-        check=False,
+        stdout_path=stdout_path,
+        stderr_path=stderr_path,
+        shell=bool(step.get("shell", False)) or isinstance(command, str),
+        run_id=str(_run_id or ""),
+        lane=str(_lane or ""),
+        step_id=step_id,
+        cwd_ref=Path(str(cwd_path)).name,
     )
-    stdout_text = completed.stdout or ""
-    stderr_text = completed.stderr or ""
-    stdout_path.write_text(stdout_text, encoding="utf-8")
-    stderr_path.write_text(stderr_text, encoding="utf-8")
 
     allow_failure = bool(step.get("allow_failure", False))
     result = "pass"
-    if completed.returncode != 0:
+    if returncode != 0:
         result = "allowed_failure" if allow_failure else "failed"
 
     return {
@@ -249,7 +334,7 @@ def run_step(
         "title": title,
         "command_display": command_display,
         "result": result,
-        "returncode": int(completed.returncode),
+        "returncode": int(returncode),
         "cwd": str(cwd_path),
         "env_keys": env_keys,
         "expected_artifacts": list(step.get("expected_artifacts", [])),

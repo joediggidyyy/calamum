@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "calamum-test"
-version = "0.2.0"
+dynamic = ["version"]
 description = "Project-aware consolidated testing CLI for pytest, sandbox, empirical, and retained aggregate validation lanes."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -12,6 +12,7 @@ authors = [
   { name = "ORACL-Prime" }
 ]
 license = "MIT"
+keywords = ["testing", "cli", "qa", "retained-evidence", "project-aware"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
@@ -23,12 +24,18 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Software Development :: Testing",
   "Topic :: Software Development :: Quality Assurance"
 ]
 dependencies = [
   "cryptography>=42.0.0"
 ]
+
+[project.urls]
+Homepage = "https://github.com/joediggidyyy/calamum"
+Repository = "https://github.com/joediggidyyy/calamum"
+Issues = "https://github.com/joediggidyyy/calamum/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -42,6 +49,9 @@ calamum = "calamum.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+
+[tool.setuptools.dynamic]
+version = {attr = "calamum.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]

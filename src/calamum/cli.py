@@ -1,9 +1,11 @@
 import argparse
+import importlib.util
 import json
 import sys
 from pathlib import Path
 from typing import Any, Dict, Optional, Sequence, Tuple
 
+from . import __version__
 from .catalog import CatalogError, default_catalog_root, default_runs_root, get_definition, list_definitions
 from .layout import (
     CalamumArgumentParser,
@@ -28,6 +30,7 @@ from .projects import (
 from .render import (
     render_definition_lines,
     render_definition_list,
+    render_monitor_capability_list,
     render_no_go_packet,
     render_project_lines,
     render_project_list,
@@ -74,14 +77,18 @@ def _set_parent_help(
     summary: str,
     groups: Sequence[Tuple[str, Sequence[Tuple[str, str]]]],
     examples: Optional[Sequence[str]] = None,
+    extra_options: Optional[Sequence[Tuple[str, str]]] = None,
 ) -> None:
     if hasattr(parser, "set_custom_help_renderer"):
+        options = [("-h, --help", "show this help message and exit")]
+        if extra_options:
+            options.extend(list(extra_options))
         parser.set_custom_help_renderer(
             lambda _: render_help_overview(
                 usage=usage,
                 summary=summary,
                 groups=groups,
-                options=[("-h, --help", "show this help message and exit")],
+                options=options,
                 examples=examples,
             )
         )
@@ -89,6 +96,127 @@ def _set_parent_help(
 
 def _add_json_argument(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--json", action="store_true", help="Emit machine-readable output")
+
+
+def _version_text() -> str:
+    return "calamum {0}".format(__version__)
+
+
+def _add_project_namespace(
+    parser: argparse.ArgumentParser,
+    *,
+    usage: str,
+    summary: str,
+    examples: Sequence[str],
+) -> None:
+    project_sub = parser.add_subparsers(dest="project_cmd", required=True, parser_class=CalamumArgumentParser, metavar="<command>")
+    _set_parent_help(
+        parser,
+        usage=usage,
+        summary=summary,
+        groups=[
+            ("Registration", (("register", "Register or update a project descriptor."), ("set", "Set the active Calamum project."), ("current", "Show the resolved current project."))),
+            ("Inspection", (("validate", "Validate a project descriptor."), ("list", "List locally registered projects."), ("show", "Show one registered project."))),
+        ],
+        examples=list(examples),
+    )
+
+    project_register = _configure_parser_sections(
+        project_sub.add_parser(
+            "register",
+            help="Register a project descriptor",
+            description="Register a project descriptor and optional machine-local overlay without crowding the terminal with raw JSON.",
+        ),
+        arguments_title="Registration options",
+    )
+    register_identity = project_register.add_argument_group("Identity")
+    register_identity.add_argument("--id", dest="project_id", default="", help="Stable project id")
+    register_identity.add_argument("--name", default="", help="Human-facing project name")
+    register_identity.add_argument("--root", default="", help="Project root directory")
+    register_identity.add_argument("--alias", action="append", dest="aliases", help="Additional project alias", default=[])
+    register_identity.add_argument("--shape", default="generic", help="Project shape kind")
+    register_runtime = project_register.add_argument_group("Runtime roots")
+    register_runtime.add_argument("--catalog-root", default=DEFAULT_CATALOG_ROOT_TEXT, help="Project-local catalog root (default: {0})".format(DEFAULT_CATALOG_ROOT_TEXT))
+    register_runtime.add_argument("--runs-root", default=DEFAULT_RUNS_ROOT_TEXT, help="Project-local retained runs root (default: {0}; local-only by default)".format(DEFAULT_RUNS_ROOT_TEXT))
+    register_runtime.add_argument("--reports-root", default=DEFAULT_REPORTS_ROOT_TEXT, help="Project-local aggregate reports root (default: {0}; local-only by default)".format(DEFAULT_REPORTS_ROOT_TEXT))
+    register_runtime.add_argument("--working-dir", default=".", help="Default execution working directory")
+    register_contract = project_register.add_argument_group("Contract rules")
+    register_contract.add_argument("--path", action="append", default=[], help="Additional path alias using key=value")
+    register_contract.add_argument("--require-marker", action="append", default=[], help="Required project marker")
+    register_contract.add_argument("--require-path", action="append", default=[], help="Required project-relative path")
+    register_local = project_register.add_argument_group("Machine-local overrides")
+    register_local.add_argument("--python", default="", help="Machine-local Python executable override")
+    register_local.add_argument("--shell", default="", help="Machine-local shell override")
+    register_local.add_argument("--env-file", default="", help="Machine-local env file override")
+    register_local.add_argument("--trusted-requester", action="append", default=[], help="Allowlisted delegated requester id")
+    register_local.add_argument("--application", default="", help="Optional application id metadata")
+    register_local.add_argument("--domain", default="general", help="Optional project domain")
+    register_flow = project_register.add_argument_group("Interaction")
+    register_flow.add_argument("--interactive", action="store_true", help="Prompt for missing values")
+    register_flow.add_argument("--no-input", action="store_true", help="Fail rather than prompting for missing values")
+    register_flow.add_argument("--set-current", action="store_true", help="Set this project as active after registration")
+    register_flow.add_argument("--write-local-override", action="store_true", help="Persist a machine-local overlay record")
+    register_flow.add_argument("--force", action="store_true", help="Overwrite an existing descriptor")
+    add_config_root_argument(project_register.add_argument_group("Context options"))
+    _add_json_argument(project_register.add_argument_group("Output options"))
+
+    project_set = _configure_parser_sections(
+        project_sub.add_parser("set", help="Set the active project", description="Set the active Calamum project for later commands."),
+        arguments_title="Required arguments",
+    )
+    project_set.add_argument("project", help="Project id, alias, or descriptor-root path")
+    add_config_root_argument(project_set.add_argument_group("Context options"))
+    _add_json_argument(project_set.add_argument_group("Output options"))
+
+    project_current = _configure_parser_sections(
+        project_sub.add_parser("current", help="Show the current project", description="Show the resolved current Calamum project."),
+        arguments_title="Context selectors",
+    )
+    add_config_root_argument(project_current.add_argument_group("Context options"))
+    _add_json_argument(project_current.add_argument_group("Output options"))
+
+    project_validate = _configure_parser_sections(
+        project_sub.add_parser("validate", help="Validate a project descriptor", description="Validate a project descriptor and its retained-output path contract."),
+        arguments_title="Project selector",
+    )
+    project_validate.add_argument("project", nargs="?", default="", help="Optional project id, alias, or descriptor-root path")
+    add_config_root_argument(project_validate.add_argument_group("Context options"))
+    _add_json_argument(project_validate.add_argument_group("Output options"))
+
+    project_list = _configure_parser_sections(
+        project_sub.add_parser("list", help="List registered projects", description="List locally registered Calamum project descriptors."),
+        arguments_title="Context selectors",
+    )
+    add_config_root_argument(project_list.add_argument_group("Context options"))
+    _add_json_argument(project_list.add_argument_group("Output options"))
+
+    project_show = _configure_parser_sections(
+        project_sub.add_parser("show", help="Show one registered project", description="Show one registered Calamum project descriptor."),
+        arguments_title="Required arguments",
+    )
+    project_show.add_argument("project", help="Project id, alias, or descriptor-root path")
+    add_config_root_argument(project_show.add_argument_group("Context options"))
+    _add_json_argument(project_show.add_argument_group("Output options"))
+
+
+def _monitor_capability_summary(project_context: Optional[Any]) -> Dict[str, Any]:
+    return {
+        "decision": "go",
+        "action": "monitor-capability-list",
+        "summary": "Current monitor-shell scaffold and adapter posture.",
+        "monitor_surface_status": "scaffolded",
+        "project": project_context.to_payload() if project_context is not None else {},
+        "project_context_resolved": bool(project_context is not None),
+        "json_noninteractive": True,
+        "platform": sys.platform,
+        "pyshark_installed": bool(importlib.util.find_spec("pyshark") is not None),
+        "adapters": {
+            "pnp": "planned",
+            "pcap": "planned",
+            "session": "planned",
+        },
+        "canonical_root_commands": ["test", "project", "monitor"],
+    }
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -114,14 +242,16 @@ def build_parser() -> argparse.ArgumentParser:
         ),
         options_title="Options",
     )
+    parser.add_argument("--version", action="version", version=_version_text(), help="show installed version and exit")
     subcommands = parser.add_subparsers(dest="command", required=True, parser_class=CalamumArgumentParser, metavar="<command>")
 
     _set_parent_help(
         parser,
         usage="calamum [-h] <command> ...",
-        summary="Calamum retained-evidence testing CLI for catalog definitions, project context, retained runs, and aggregate reports.",
-        groups=[("Commands", (("test", "Run and inspect Calamum test surfaces."),))],
-        examples=["calamum test list", "calamum test project current", "calamum test reports list"],
+        summary="Calamum retained-evidence CLI for test execution, project context, and monitor scaffolding.",
+        groups=[("Commands", (("test", "Run and inspect Calamum test surfaces."), ("project", "Register and resolve Calamum project contexts."), ("monitor", "Inspect Calamum monitor scaffolding and capability surfaces.")))],
+        examples=["calamum test list", "calamum project current", "calamum monitor capability list"],
+        extra_options=[("--version", "show installed version and exit")],
     )
 
     test = _configure_parser_sections(
@@ -242,99 +372,78 @@ def build_parser() -> argparse.ArgumentParser:
     project = _configure_parser_sections(
         test_sub.add_parser(
             "project",
+            help="Compatibility alias for top-level project contexts",
+            description="Compatibility alias for top-level Calamum project context commands.",
+        ),
+        options_title="Options",
+    )
+    _add_project_namespace(
+        project,
+        usage="calamum test project [-h] <command> ...",
+        summary="Compatibility alias for top-level project context management.",
+        examples=["calamum project register --id codesentinel-core --root .", "calamum project current"],
+    )
+
+    project_root = _configure_parser_sections(
+        subcommands.add_parser(
+            "project",
             help="Register and resolve project contexts",
             description="Register, inspect, and validate Calamum project contexts used to resolve catalog, runs, and reports roots.",
         ),
         options_title="Options",
     )
-    project_sub = project.add_subparsers(dest="project_cmd", required=True, parser_class=CalamumArgumentParser, metavar="<command>")
-    _set_parent_help(
-        project,
-        usage="calamum test project [-h] <command> ...",
+    _add_project_namespace(
+        project_root,
+        usage="calamum project [-h] <command> ...",
         summary="Manage the project context packet that Calamum uses to resolve local catalog, run, and report roots.",
-        groups=[
-            ("Registration", (("register", "Register or update a project descriptor."), ("set", "Set the active Calamum project."), ("current", "Show the resolved current project."))),
-            ("Inspection", (("validate", "Validate a project descriptor."), ("list", "List locally registered projects."), ("show", "Show one registered project."))),
-        ],
-        examples=["calamum test project register --id codesentinel-core --root .", "calamum test project current"],
+        examples=["calamum project register --id codesentinel-core --root .", "calamum project current"],
     )
 
-    project_register = _configure_parser_sections(
-        project_sub.add_parser(
-            "register",
-            help="Register a project descriptor",
-            description="Register a project descriptor and optional machine-local overlay without crowding the terminal with raw JSON.",
+    monitor = _configure_parser_sections(
+        subcommands.add_parser(
+            "monitor",
+            help="Inspect monitor scaffolding and capabilities",
+            description="Inspect the current Calamum monitor shell, capability surface, and planned adapter posture.",
         ),
-        arguments_title="Registration options",
+        options_title="Options",
     )
-    register_identity = project_register.add_argument_group("Identity")
-    register_identity.add_argument("--id", dest="project_id", default="", help="Stable project id")
-    register_identity.add_argument("--name", default="", help="Human-facing project name")
-    register_identity.add_argument("--root", default="", help="Project root directory")
-    register_identity.add_argument("--alias", action="append", dest="aliases", help="Additional project alias", default=[])
-    register_identity.add_argument("--shape", default="generic", help="Project shape kind")
-    register_runtime = project_register.add_argument_group("Runtime roots")
-    register_runtime.add_argument("--catalog-root", default=DEFAULT_CATALOG_ROOT_TEXT, help="Project-local catalog root (default: {0})".format(DEFAULT_CATALOG_ROOT_TEXT))
-    register_runtime.add_argument("--runs-root", default=DEFAULT_RUNS_ROOT_TEXT, help="Project-local retained runs root (default: {0}; local-only by default)".format(DEFAULT_RUNS_ROOT_TEXT))
-    register_runtime.add_argument("--reports-root", default=DEFAULT_REPORTS_ROOT_TEXT, help="Project-local aggregate reports root (default: {0}; local-only by default)".format(DEFAULT_REPORTS_ROOT_TEXT))
-    register_runtime.add_argument("--working-dir", default=".", help="Default execution working directory")
-    register_contract = project_register.add_argument_group("Contract rules")
-    register_contract.add_argument("--path", action="append", default=[], help="Additional path alias using key=value")
-    register_contract.add_argument("--require-marker", action="append", default=[], help="Required project marker")
-    register_contract.add_argument("--require-path", action="append", default=[], help="Required project-relative path")
-    register_local = project_register.add_argument_group("Machine-local overrides")
-    register_local.add_argument("--python", default="", help="Machine-local Python executable override")
-    register_local.add_argument("--shell", default="", help="Machine-local shell override")
-    register_local.add_argument("--env-file", default="", help="Machine-local env file override")
-    register_local.add_argument("--trusted-requester", action="append", default=[], help="Allowlisted delegated requester id")
-    register_local.add_argument("--application", default="", help="Optional application id metadata")
-    register_local.add_argument("--domain", default="general", help="Optional project domain")
-    register_flow = project_register.add_argument_group("Interaction")
-    register_flow.add_argument("--interactive", action="store_true", help="Prompt for missing values")
-    register_flow.add_argument("--no-input", action="store_true", help="Fail rather than prompting for missing values")
-    register_flow.add_argument("--set-current", action="store_true", help="Set this project as active after registration")
-    register_flow.add_argument("--write-local-override", action="store_true", help="Persist a machine-local overlay record")
-    register_flow.add_argument("--force", action="store_true", help="Overwrite an existing descriptor")
-    add_config_root_argument(project_register.add_argument_group("Context options"))
-    _add_json_argument(project_register.add_argument_group("Output options"))
-
-    project_set = _configure_parser_sections(
-        project_sub.add_parser("set", help="Set the active project", description="Set the active Calamum project for later commands."),
-        arguments_title="Required arguments",
+    monitor_sub = monitor.add_subparsers(dest="monitor_cmd", required=True, parser_class=CalamumArgumentParser, metavar="<command>")
+    _set_parent_help(
+        monitor,
+        usage="calamum monitor [-h] <command> ...",
+        summary="Use the monitor namespace to review native monitor scaffolding and capability signals without exposing backend tool names as primary operator commands.",
+        groups=[("Inspection", (("capability", "Inspect monitor-shell capabilities and adapter posture."),))],
+        examples=["calamum monitor capability list", "calamum monitor -h"],
     )
-    project_set.add_argument("project", help="Project id, alias, or descriptor-root path")
-    add_config_root_argument(project_set.add_argument_group("Context options"))
-    _add_json_argument(project_set.add_argument_group("Output options"))
 
-    project_current = _configure_parser_sections(
-        project_sub.add_parser("current", help="Show the current project", description="Show the resolved current Calamum project."),
+    monitor_capability = _configure_parser_sections(
+        monitor_sub.add_parser(
+            "capability",
+            help="Inspect monitor capabilities",
+            description="Inspect the current Calamum monitor-shell capability and adapter posture.",
+        ),
+        options_title="Options",
+    )
+    monitor_capability_sub = monitor_capability.add_subparsers(dest="monitor_capability_cmd", required=True, parser_class=CalamumArgumentParser, metavar="<command>")
+    _set_parent_help(
+        monitor_capability,
+        usage="calamum monitor capability [-h] <command> ...",
+        summary="Review the current monitor-shell scaffold, adapter posture, and project-context resolution status.",
+        groups=[("Inspection", (("list", "List current monitor capability signals."),))],
+        examples=["calamum monitor capability list", "calamum monitor capability list --json"],
+    )
+
+    monitor_capability_list = _configure_parser_sections(
+        monitor_capability_sub.add_parser(
+            "list",
+            help="List monitor capability signals",
+            description="List the current Calamum monitor-shell capability signals and adapter posture.",
+        ),
         arguments_title="Context selectors",
     )
-    add_config_root_argument(project_current.add_argument_group("Context options"))
-    _add_json_argument(project_current.add_argument_group("Output options"))
-
-    project_validate = _configure_parser_sections(
-        project_sub.add_parser("validate", help="Validate a project descriptor", description="Validate a project descriptor and its retained-output path contract."),
-        arguments_title="Project selector",
-    )
-    project_validate.add_argument("project", nargs="?", default="", help="Optional project id, alias, or descriptor-root path")
-    add_config_root_argument(project_validate.add_argument_group("Context options"))
-    _add_json_argument(project_validate.add_argument_group("Output options"))
-
-    project_list = _configure_parser_sections(
-        project_sub.add_parser("list", help="List registered projects", description="List locally registered Calamum project descriptors."),
-        arguments_title="Context selectors",
-    )
-    add_config_root_argument(project_list.add_argument_group("Context options"))
-    _add_json_argument(project_list.add_argument_group("Output options"))
-
-    project_show = _configure_parser_sections(
-        project_sub.add_parser("show", help="Show one registered project", description="Show one registered Calamum project descriptor."),
-        arguments_title="Required arguments",
-    )
-    project_show.add_argument("project", help="Project id, alias, or descriptor-root path")
-    add_config_root_argument(project_show.add_argument_group("Context options"))
-    _add_json_argument(project_show.add_argument_group("Output options"))
+    add_project_selector_argument(monitor_capability_list.add_argument_group("Context options"))
+    add_config_root_argument(monitor_capability_list.add_argument_group("Context options"))
+    _add_json_argument(monitor_capability_list.add_argument_group("Output options"))
 
     reports = _configure_parser_sections(
         test_sub.add_parser(
@@ -457,12 +566,9 @@ def add_config_root_argument(parser: argparse.ArgumentParser) -> None:
 
 
 def dispatch(args: argparse.Namespace) -> Dict[str, Any]:
-    if args.command != "test":
-        raise RunError("Unsupported command family: {0}".format(args.command))
-
     config_root = Path(args.config_root).resolve() if getattr(args, "config_root", None) else None
 
-    if args.test_cmd == "project":
+    if args.command == "project" or (args.command == "test" and args.test_cmd == "project"):
         if args.project_cmd == "register":
             payload = collect_registration_inputs(args)
             packet = register_project(config_root=config_root, **payload)
@@ -511,6 +617,15 @@ def dispatch(args: argparse.Namespace) -> Dict[str, Any]:
                 "action": "project-show",
                 "project": resolved.to_payload(),
             }
+
+    if args.command == "monitor":
+        project_context = resolve_project(project=getattr(args, "project", None) or None, config_root=config_root)
+        if args.monitor_cmd == "capability" and args.monitor_capability_cmd == "list":
+            return _monitor_capability_summary(project_context)
+        raise RunError("Unsupported monitor command: {0}".format(args.monitor_cmd))
+
+    if args.command != "test":
+        raise RunError("Unsupported command family: {0}".format(args.command))
 
     project_context = resolve_project(project=getattr(args, "project", None) or None, config_root=config_root)
     catalog_root = resolve_catalog_root(args, project_context)
@@ -651,6 +766,8 @@ def emit(packet: Dict[str, Any], as_json: bool) -> None:
         lines = render_definition_list(packet)
     elif action == "test-show":
         lines = render_definition_lines(packet.get("definition", {}))
+    elif action == "monitor-capability-list":
+        lines = render_monitor_capability_list(packet)
     elif action in ("test-run", "test-runs-show"):
         lines = render_run_summary(packet)
     elif action == "test-runs-list":

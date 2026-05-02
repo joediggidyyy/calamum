@@ -1,12 +1,28 @@
 # Calamum Test
 
 <p align="center">
-	<img src="assets/branding/calamum_logo_color.png" alt="Calamum logo" width="360">
+	<img src="https://raw.githubusercontent.com/joediggidyyy/calamum/main/assets/branding/calamum_logo_color.png" alt="Calamum logo" width="360">
 </p>
 
 `Calamum Test` is a standalone, project-aware testing substrate for consolidating `pytest`, `sandbox_test`, and `empirical_test` lanes behind one retained-evidence CLI and Python facade.
 
 Public repository: `https://github.com/joediggidyyy/calamum`
+
+## Install and verify
+
+Install from PyPI using the published distribution name:
+
+- `pip install calamum-test`
+
+Run the installed CLI using the runtime command name:
+
+- `calamum --version`
+- `calamum -h`
+
+Important naming note:
+
+- PyPI package / dependency name: `calamum-test`
+- import package and runtime command: `calamum`
 
 The current implementation is no longer just a seed scaffold. It now includes:
 
@@ -20,6 +36,12 @@ The current implementation is no longer just a seed scaffold. It now includes:
 
 ## Command surface
 
+### Top-level families
+
+- `calamum test` — validation definition discovery and execution
+- `calamum project` — project registration, active-project state, and context readback
+- `calamum monitor` — current monitor-shell scaffolding and capability readback
+
 ### Test execution
 
 - `calamum test list`
@@ -32,14 +54,33 @@ A `definition_id` is the exact id of a test definition in the catalog. Use
 `calamum test list` to discover the available ids, then pass one of those ids to
 `calamum test show` or `calamum test run`. Example: `seed-cli-smoke`.
 
+**Progress visibility**: `calamum test run` emits a heartbeat line to stderr every
+20 seconds while a long-running step subprocess is active. This indicates the
+orchestrator is alive and the step is progressing, not stalled. The retained-evidence
+artifacts (`report.json`, `report.md`, `manifest.json`, `checksums.json`) are
+written only after the step completes; heartbeat lines are transient and not stored.
+
 ### Project management
 
-- `calamum test project register`
-- `calamum test project set <project>`
-- `calamum test project current`
-- `calamum test project validate [--project <project>]`
-- `calamum test project list`
-- `calamum test project show <project>`
+- `calamum project register`
+- `calamum project set <project>`
+- `calamum project current`
+- `calamum project validate [<project>]`
+- `calamum project list`
+- `calamum project show <project>`
+
+Compatibility note:
+
+- `calamum test project ...` remains available as a compatibility alias during the current route migration.
+
+### Monitor scaffolding
+
+- `calamum monitor capability list`
+
+Current note:
+
+- the top-level `monitor` family is now present as native Calamum scaffolding for future monitor adapters and readiness surfaces;
+- broader monitor execution families are still a follow-on implementation lane, so current help/runtime output should be treated as the truthful monitor-shell baseline rather than a claim of full capture parity.
 
 ### Aggregate reporting
 
@@ -364,7 +405,8 @@ From `projects/calamum/`:
 Example flow:
 
 - `python -m pip install -e .[dev]`
-- `calamum test project current --json`
+- `calamum --version`
+- `calamum project current --json`
 - `calamum test list --json`
 - `calamum test run seed-cli-smoke --job local-smoke --json`
 - `calamum test reports generate --scope project --project calamum-test --json`

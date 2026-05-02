@@ -32,7 +32,10 @@ Minimum routine validation:
 
 Before a release-oriented change is considered ready:
 
+- clean stale `dist/` artifacts before rebuilding
 - build `sdist` and `wheel`
 - run `twine check`
 - confirm console-script behavior
+- confirm `calamum --version` reports the release candidate version
+- confirm the install/runtime name split is documented (`calamum-test` -> `calamum`)
 - confirm detached signatures and receipt flows where applicable

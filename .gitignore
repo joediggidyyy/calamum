@@ -9,6 +9,7 @@ dist/
 !.calamum/generated/.gitignore
 runs/
 reports/
+jobs/
 .venv/
 planning/
 .env

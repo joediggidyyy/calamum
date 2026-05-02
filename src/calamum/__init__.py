@@ -35,4 +35,4 @@ __all__ = [
 	"set_current_project",
 ]
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
