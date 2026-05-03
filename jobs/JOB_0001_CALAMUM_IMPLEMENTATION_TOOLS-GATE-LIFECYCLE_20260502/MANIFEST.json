@@ -1,0 +1,90 @@
+{
+  "schema_version": "job-root-closeout-manifest-v1",
+  "manifest_type": "job_root_closeout_manifest",
+  "generated_at": "2026-05-02T19:33:45.158700Z",
+  "closed_at": "2026-05-02T19:33:38.933033Z",
+  "task_id": "calamum-job-0001-tools_gate_lifecycle-20260502",
+  "project_id": "calamum",
+  "project_job_label": "CALAMUM_JOB_0001",
+  "status": "completed",
+  "job_root": "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502",
+  "generator": {
+    "command": "codesentinel job close calamum-job-0001-tools_gate_lifecycle-20260502",
+    "engine": "codesentinel/cli/jobs_utils.py::_emit_close_root_manifest",
+    "routing_version": "job-routing-v1"
+  },
+  "inventory": [
+    {
+      "path": "CALAMUM_JOB_PIPELINE_SSOT_AUDIT_SCRATCHPAD_20260502.md",
+      "sha256": "532368120b3b6585b4776da2566beb3378e4e7f9a78de0a06905c91e423060e3",
+      "size_bytes": 67209,
+      "doc_class": "MARKDOWN",
+      "spine_role": null
+    },
+    {
+      "path": "CALAMUM_MONITOR_EVIDENCE_ARCHITECTURE_PROPOSAL_20260501.md",
+      "sha256": "3dbd00ff1e98f49219ed1f4e229a4f8492406709f0529622bc63020b8922433d",
+      "size_bytes": 42390,
+      "doc_class": "MARKDOWN",
+      "spine_role": null
+    },
+    {
+      "path": "CALAMUM_MONITOR_EVIDENCE_ARCHITECTURE_SCRATCHPAD_20260501.md",
+      "sha256": "ce0150861b538d565d786c471135a9d284197c8108bb085576ca616c372a1ef4",
+      "size_bytes": 26850,
+      "doc_class": "MARKDOWN",
+      "spine_role": null
+    },
+    {
+      "path": "JOB.json",
+      "sha256": "a899801144b8c956f493ec394dd2ac2c57676c9649d23f843afe94c0e1b9b17d",
+      "size_bytes": 71504,
+      "doc_class": "JOB",
+      "spine_role": "job_doc"
+    },
+    {
+      "path": "JOB.md",
+      "sha256": "fc889a313141d7f026190f25238da60d8fc71ee83362e3808af495d87c69ac6d",
+      "size_bytes": 9669,
+      "doc_class": "JOB",
+      "spine_role": "job_doc"
+    },
+    {
+      "path": "JOB.md.resolution_trace.json",
+      "sha256": "aac18e47cb504fe17860358a803173927579cc1995782342f121160cd8b09245",
+      "size_bytes": 21691,
+      "doc_class": "JSON",
+      "spine_role": null
+    },
+    {
+      "path": "QF.md",
+      "sha256": "108b05e01d65040345810b9ae7440c84934813b524c145ac946e03d89fa1686d",
+      "size_bytes": 37903,
+      "doc_class": "MARKDOWN",
+      "spine_role": null
+    },
+    {
+      "path": "QS.json",
+      "sha256": "b410b0aad75e6a38753f3100cdd0831b6c236f32785602a69c64f56bd1f602a7",
+      "size_bytes": 62697,
+      "doc_class": "QS",
+      "spine_role": "queststack"
+    }
+  ],
+  "lineage": {
+    "legacy_job_path": "",
+    "legacy_qs_path": "",
+    "legacy_qf_path": "",
+    "legacy_doc_paths": []
+  },
+  "evidence": {
+    "ssot": "operations/tasks.json",
+    "gate_events": "logs/behavioral/gates/gate_events.jsonl",
+    "job_events": "logs/behavioral/jobs/job_events.jsonl"
+  },
+  "close_auth": {
+    "mode": "interactive_hidden",
+    "outcome": "confirmed",
+    "subject_proof_sha256": "f4e3505c49d0812db3b89e49e6a7780478983a42b3108813f199f9c39012c9de"
+  }
+}

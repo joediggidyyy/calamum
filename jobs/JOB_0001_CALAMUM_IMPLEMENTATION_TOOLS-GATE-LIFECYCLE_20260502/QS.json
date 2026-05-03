@@ -1,0 +1,995 @@
+{
+  "__codesentinel_template_pointer__": "codesentinel/assets/VAULT_templates/jobpipeline/QS_JOB_START.json.template",
+  "doc_class": "queststack",
+  "queststack_id": "qs",
+  "task_id": "calamum-job-0001-tools_gate_lifecycle-20260502",
+  "project_id": "calamum",
+  "title": "Calamum monitor scaffolding implementation for native evidence orchestration readiness gates",
+  "owner": "ORACL-Prime",
+  "created_at": "2026-05-02T07:33:01.250255Z",
+  "updated_at": "2026-05-02T19:33:44.904508Z",
+  "current_focus_frame": "qf7",
+  "governance_summary": {
+    "authority_spine": [
+      "docs/policies/operations/OPERATIONS_POLICY/PP_OPS_PROTOCOL_POL_JOB_PIPELINE_AUTHORITY_AND_EXECUTION_ARTIFACTS_20260312.md",
+      "docs/operations/ssot/JOBS_AND_EXECUTION_SSOT.md",
+      "operations/tasks.json"
+    ],
+    "mutation_contract": "Mutate frame state in QS.json only; regenerate required derived surfaces in the same transition.",
+    "projection_contract": "QF.md remains a human-facing projection derived from QS.json and is not a peer authority."
+  },
+  "governance_reminders": [
+    "QS.json is the authoritative execution spine; subordinate docs are derived.",
+    "Frame mutation requires same-transition regeneration of required derived surfaces.",
+    "Governance block and reminders should remain populated for each frame in active lanes."
+  ],
+  "frames": [
+    {
+      "frame_id": "qf1",
+      "title": "Authority, corpus lock, and command surface freeze",
+      "execution_order": 1,
+      "status": "completed",
+      "tasks": [
+        "Reconfirm first-order lifecycle authority (`operations/tasks.json`, policy SSOT, and this job pair) and the derived-reader boundary for `JOB.md`.",
+        "Re-ingest the proposal, scratchpad, v1 implementation plan, and v2 boundary note, then freeze which statements are active design intent versus exploratory context.",
+        "Extract the accepted operator grammar: top-level `test`, `project`, and `monitor`; project-scoped evidence; `project set`/`project clear`; and `--json` as the canonical noninteractive trigger.",
+        "Record the explicit rejection of backend-named command families such as PyShark, TShark, dumpcap, USBPcap, Heimdall, or Windows PnP as primary operator nouns.",
+        "Capture the package/import/project-identity split so later frames do not confuse `calamum-test` distribution metadata with standalone `calamum` runtime identity."
+      ],
+      "goal": "Reconfirm the authoritative planning corpus and freeze the target operator-facing command grammar for standalone Calamum before any implementation slice is selected.",
+      "why_this_frame_exists": "The job needs a real opening frame that separates authority, planning, and runtime command-shape decisions from downstream implementation detail. This prevents the earlier single-frame overload and stops proposal text, package naming drift, or backend nouns from becoming accidental authority.",
+      "current_execution_state": "qf1 completed; the authority spine and planning corpus are locked for this lane, and the accepted operator grammar remains `calamum test`, `calamum monitor`, and `calamum project` with project-scoped evidence routed through `calamum project evidence`.",
+      "next_action": "Advance to qf2 and map the live CLI/API/report/signing substrate against the frozen top-level grammar, compatibility aliases, and retained-evidence boundary.",
+      "notes": "Current live evidence already shows the accepted shape is `calamum test`, `calamum monitor`, and `calamum project` with project-scoped evidence. Use `calamum` as the CodeSentinel project identity while preserving `calamum-test` as distribution/package identity only.",
+      "execution_plan": "Read the first-order authority spine (`operations/tasks.json`, policy SSOT, and the job pair), ingest the proposal, the monitor/evidence scratchpad, the v1 plan, the v2 boundary note, `.calamum/project.json`, and `pyproject.toml`, then freeze the accepted top-level command grammar, project-scoped evidence routing, backend-name non-goals, and the `calamum` runtime versus `calamum-test` distribution boundary.",
+      "results": "Executed a corpus readback across the declared qf1 evidence routes and locked the active planning basis for this lane. The accepted operator-facing grammar is `calamum test`, `calamum monitor`, and `calamum project`, with retained run/session/report retrieval routed through `calamum project evidence`. Backend-facing tool names such as PyShark, TShark, dumpcap, USBPcap, Heimdall, or Windows PnP remain adapter/readiness metadata rather than primary operator nouns. The v2 planning note remains exploratory except for silent Polymath integration, and the current `calamum-test` descriptor/package identity is treated as distribution metadata rather than as a replacement for the standalone `calamum` runtime/CLI identity frozen here.",
+      "interpretation": "qf1 achieved its purpose: authority, corpus, and command-shape drift are now bounded before implementation-slice selection begins. The lane can move into qf2 without reopening the top-level command-family debate, without elevating exploratory v2 ideas into active canon, and without letting backend tool names or package metadata redefine the user-facing Calamum identity.",
+      "scenario_focus": [
+        "authority routing",
+        "accepted command grammar",
+        "distribution/runtime/project identity split",
+        "non-goals for backend-named operator surfaces"
+      ],
+      "realignment_reminders": [
+        "Current authority lives in the policy/SSOT/task-registry spine plus this `JOB.json`; `JOB.md` is a derived reader projection only.",
+        "Use `calamum` as the CodeSentinel project id; reserve `calamum-test` for package/distribution references.",
+        "Do not promote proposal-side convenience ideas into active canon unless the proposal itself or first-order authority already carries them.",
+        "Keep backend tooling names in adapter/readiness metadata, not primary operator grammar."
+      ],
+      "exit_criteria": [
+        "The authoritative planning corpus and its authority classes are explicitly locked.",
+        "The accepted top-level command grammar and explicit non-goals are frozen in execution-ready language.",
+        "Identity drift boundaries (`calamum` vs `calamum-test`) are recorded for downstream frames.",
+        "The active lane can advance without re-litigating its core operator-facing command shape."
+      ],
+      "evidence_routes": [
+        "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/CALAMUM_MONITOR_EVIDENCE_ARCHITECTURE_PROPOSAL_20260501.md",
+        "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/CALAMUM_MONITOR_EVIDENCE_ARCHITECTURE_SCRATCHPAD_20260501.md",
+        "projects/calamum/planning/CALAMUM_TEST_CHILD_REPO_IMPLEMENTATION_PLAN_20260423.md",
+        "projects/calamum/planning/CALAMUM_TEST_V2_TARGETS_20260423.md",
+        "projects/calamum/.calamum/project.json",
+        "projects/calamum/pyproject.toml"
+      ],
+      "test_candidate_scan": {
+        "pytest": [
+          "Future CLI parser tests for top-level `test`, `project`, and `monitor` family routing.",
+          "Future identity/descriptor tests ensuring `calamum` runtime naming does not regress into `calamum-test` project identity."
+        ],
+        "sandbox_test": [
+          "Root help snapshot for the accepted top-level command family split after implementation begins.",
+          "Noninteractive `--json` help and no-prompt behavior review for new command families."
+        ],
+        "empirical_test": [
+          "Manual corpus readback proving the accepted grammar is anchored in active planning authority rather than exploratory spillover.",
+          "Manual comparison of `JOB.json` and regenerated `JOB.md` after this rewrite."
+        ]
+      },
+      "validation_summary": {
+        "pytest": {
+          "status": "deferred",
+          "note": "This frame freezes grammar and authority. Pytest execution remains deferred until the later implementation slice is selected.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "sandbox_test": {
+          "status": "deferred",
+          "note": "Help/JSON snapshots are declared now and executed only after implementation exists.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "empirical_test": {
+          "status": "executed",
+          "note": "Completed a manual corpus reconciliation across the declared qf1 authority and planning surfaces to lock the accepted command grammar, identity split, and non-goals before advancing the frame stack.",
+          "evidence_pointer": "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/CALAMUM_JOB_PIPELINE_SSOT_AUDIT_SCRATCHPAD_20260502.md",
+          "basis": "authoritative qf1 corpus readback"
+        }
+      },
+      "governance_block": {
+        "authority_spine": [
+          "docs/policies/operations/OPERATIONS_POLICY/PP_OPS_PROTOCOL_POL_JOB_PIPELINE_AUTHORITY_AND_EXECUTION_ARTIFACTS_20260312.md",
+          "docs/operations/ssot/JOBS_AND_EXECUTION_SSOT.md",
+          "operations/tasks.json"
+        ],
+        "containment_rules": [
+          "Non-mutating investigation is allowed when it materially improves understanding of the active lane.",
+          "Do not mutate runtime code, lifecycle state, or downstream consumer scripts in qf1.",
+          "Keep generated `JOB.md` derived from `JOB.json`; regenerate rather than hand-edit.",
+          "Record only the accepted command grammar and non-goals needed to unblock later design frames."
+        ],
+        "drift_prevention_rules": [
+          "Do not treat exploratory v2 ideas as active commitments unless re-approved.",
+          "Do not infer authority from convenience prose in supporting docs when first-order policy disagrees.",
+          "Do not collapse standalone Calamum identity into a Vulcan-local or CodeSentinel-only grammar."
+        ],
+        "micro_plan_rule": "Generate a micro-plan immediately before this frame becomes active; future-frame micro-plans remain unadmitted."
+      },
+      "governance_reminders": [
+        "Reconfirm authority spine before mutating frame state.",
+        "Capture explicit evidence pointers for every status-changing action.",
+        "Record clear next-action intent before frame advance."
+      ],
+      "micro_plan_admitted": true,
+      "micro_frames_admitted": false,
+      "micro_plan_contract": {
+        "allowed": true,
+        "admission_rule": "active-frame-only",
+        "required_sections_when_admitted": [
+          "title",
+          "status",
+          "grounded_authority_basis",
+          "frozen_execution_order",
+          "interpretation_rules",
+          "target_outputs",
+          "validation_slice",
+          "explicit_non_goals",
+          "completion_criteria",
+          "deferral_boundaries"
+        ]
+      },
+      "micro_plan": {
+        "title": "qf1 authority and grammar freeze",
+        "status": "completed",
+        "grounded_authority_basis": [
+          "operations/tasks.json state authority remains first-order for this lane.",
+          "QS.json supplies supplemental execution detail and must not override state truth already held in operations/tasks.json.",
+          "The proposal, architecture scratchpad, v1 implementation plan, v2 boundary note, project descriptor, and packaging metadata are the declared qf1 planning corpus."
+        ],
+        "frozen_execution_order": [
+          "Reconfirm first-order lifecycle authority and derived-reader boundaries.",
+          "Re-ingest the declared planning corpus and classify active intent versus exploratory spillover.",
+          "Freeze the accepted top-level command grammar and project-scoped evidence route.",
+          "Record backend-name non-goals and the runtime-versus-distribution identity split."
+        ],
+        "interpretation_rules": [
+          "Treat v2 notes as exploratory unless they are explicitly elevated by first-order authority.",
+          "Prefer the proposal's accepted operator grammar over older scratchpad convenience ideas when they diverge.",
+          "Keep backend tool names in adapter/readiness metadata, not primary operator-facing command families."
+        ],
+        "target_outputs": [
+          "Locked authority classification for qf1.",
+          "Accepted command-family grammar for standalone Calamum.",
+          "Identity boundary between `calamum` runtime/CLI naming and `calamum-test` distribution metadata.",
+          "Explicit non-goals for backend-named operator surfaces."
+        ],
+        "validation_slice": [
+          "Manual corpus readback across qf1 evidence routes.",
+          "Cross-check against first-order policy/SSOT authority surfaces.",
+          "Scratchpad execution note preserved for later audit readback."
+        ],
+        "explicit_non_goals": [
+          "Do not treat PyShark, TShark, dumpcap, USBPcap, Heimdall, or Windows PnP as top-level operator command families.",
+          "Do not let `calamum-test` distribution metadata replace the standalone `calamum` runtime identity in operator-facing grammar.",
+          "Do not promote exploratory v2 ideas into active commitments for this lane."
+        ],
+        "completion_criteria": [
+          "Authority spine confirmed.",
+          "Accepted top-level grammar frozen.",
+          "Project-scoped evidence route frozen.",
+          "Identity drift boundary recorded."
+        ],
+        "deferral_boundaries": [
+          "Implementation-slice selection belongs to qf6, not qf1.",
+          "Monitor adapter specifics and readiness packet schema belong to later frames.",
+          "Observer/Vulcan downstream parity stays subordinate to the standalone Calamum command grammar."
+        ]
+      }
+    },
+    {
+      "frame_id": "qf2",
+      "title": "Current substrate and compatibility map",
+      "execution_order": 2,
+      "status": "completed",
+      "tasks": [
+        "Map the current CLI route tree and identify exactly which command families are already implemented at the top level versus nested under `test`.",
+        "Map reusable API and substrate modules in `api.py`, `projects.py`, `runner.py`, `reports.py`, `signing.py`, `catalog.py`, `layout.py`, and `render.py`.",
+        "Freeze a compatibility matrix for existing `calamum test project`, `calamum test runs`, and `calamum test reports` behavior versus future top-level `project` and `project evidence` routes.",
+        "Identify the minimum set of implementation files that later mutation should touch, and the surfaces that must remain stable for backwards compatibility.",
+        "Cross-check `tests/test_cli.py` and related schema/data surfaces so the compatibility contract is anchored in real test coverage."
+      ],
+      "goal": "Map the live Calamum CLI, API, project, run, report, signing, catalog, and rendering seams into an explicit compatibility matrix for the accepted top-level expansion path.",
+      "why_this_frame_exists": "The proposal assumes a strong retained-evidence substrate already exists. This frame turns that assumption into a file-level compatibility map so later work reuses live substrate instead of re-implementing it or breaking existing `calamum test` behavior.",
+      "current_execution_state": "qf2 completed; the live Calamum substrate is now mapped well enough to separate reusable retained-evidence primitives from CLI-routing surfaces that will need mutation for future `project` and `monitor` expansion.",
+      "next_action": "Advance to qf3 and freeze the minimum viable `calamum project evidence` contract around the already-implemented project context, retained runs, aggregate reports, manifests, checksums, and signing helpers.",
+      "notes": "Treat current nested `calamum test project`, `calamum test runs`, and `calamum test reports` paths as compatibility surfaces, not the target long-term operator grammar.",
+      "execution_plan": "Read the current Calamum CLI, API facade, project-resolution layer, retained-run engine, aggregate-report engine, signing helpers, catalog schema, layout helpers, renderers, and CLI tests; then distinguish what is already generic/reusable from what is still route-bound to the current `calamum test` namespace and therefore likely to change when `calamum project` and `calamum monitor` become first-class top-level families.",
+      "results": "Mapped the live substrate and compatibility surface. Today only `calamum test` exists at the top level, and the nested families `project`, `runs`, and `reports` hang below it in `cli.py`. The reusable substrate is already stronger than the current command tree suggests: `projects.py` owns project registration, active-state persistence, alias resolution, overlays, and path-root derivation; `runner.py` owns retained run execution, manifests, checksums, and run index writes; `reports.py` owns aggregate generation, receipts, history, and optional signatures; `signing.py` owns canonical JSON signing/verification and checksum sidecars; `catalog.py`, `layout.py`, and `render.py` already provide schema, output-root, and human/JSON rendering contracts that can survive route migration. `api.py` is a thin facade over these reusable modules. The most likely mutation surface for the planned expansion is therefore CLI dispatch/help/output tests plus thin API/README/security adjustments, not a rewrite of the retained-evidence core.",
+      "interpretation": "qf2 confirms the proposal’s premise: the retained-evidence substrate already exists and is largely route-agnostic. Future `calamum project` and `calamum monitor` work should prefer re-routing and facade expansion over duplicating runner/report/signing/storage logic. Compatibility obligations are real because `tests/test_cli.py` currently asserts grouped help, `calamum test project ...`, retained runs, and retained reports behavior, so canonical expansion must preserve or deliberately alias those surfaces while the top-level families are introduced.",
+      "scenario_focus": [
+        "current `calamum test` behavior",
+        "project context and active-state reuse",
+        "retained run/report/signing reuse",
+        "compatibility alias boundaries"
+      ],
+      "realignment_reminders": [
+        "Prefer reuse of existing retained-run/report/signing substrate over designing parallel stores.",
+        "Compatibility aliases are acceptable; duplicate storage logic is not.",
+        "Map actual file-level seams before selecting any mutation order."
+      ],
+      "exit_criteria": [
+        "A file-anchored compatibility matrix exists for current versus target command routes.",
+        "Reusable substrate versus likely mutation targets are explicitly separated.",
+        "The job can name a bounded mutation surface without guessing about hidden dependencies."
+      ],
+      "evidence_routes": [
+        "projects/calamum/src/calamum/cli.py",
+        "projects/calamum/src/calamum/api.py",
+        "projects/calamum/src/calamum/projects.py",
+        "projects/calamum/src/calamum/runner.py",
+        "projects/calamum/src/calamum/reports.py",
+        "projects/calamum/src/calamum/signing.py",
+        "projects/calamum/src/calamum/catalog.py",
+        "projects/calamum/src/calamum/layout.py",
+        "projects/calamum/src/calamum/render.py",
+        "projects/calamum/catalog/test_definitions.json",
+        "projects/calamum/tests/test_cli.py"
+      ],
+      "test_candidate_scan": {
+        "pytest": [
+          "CLI route tests covering current `calamum test` subcommands and future alias parity expectations.",
+          "Project state tests for register/set/current/clear/list/show behavior.",
+          "Retained report generation tests that must survive route migration."
+        ],
+        "sandbox_test": [
+          "CLI help snapshots comparing nested legacy routes with future canonical routes.",
+          "Path-containment and generated-output layout probes for existing `.calamum/generated` roots."
+        ],
+        "empirical_test": [
+          "Manual readback of current CLI/API/report flow to confirm no hidden duplication assumptions.",
+          "Manual review of `tests/test_cli.py` coverage relative to the proposed compatibility matrix."
+        ]
+      },
+      "validation_summary": {
+        "pytest": {
+          "status": "deferred",
+          "note": "Pytest candidates are anchored to the compatibility map but remain deferred until the mutation slice is chosen.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "sandbox_test": {
+          "status": "deferred",
+          "note": "CLI help and path-layout probes are planned outputs for post-mutation validation.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "empirical_test": {
+          "status": "executed",
+          "note": "Completed a live file-level seam review across the current CLI, API, project, run, report, signing, catalog, layout, render, and CLI-test surfaces to freeze the qf2 compatibility map.",
+          "evidence_pointer": "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/CALAMUM_JOB_PIPELINE_SSOT_AUDIT_SCRATCHPAD_20260502.md",
+          "basis": "live substrate/code readback"
+        }
+      },
+      "governance_block": {
+        "authority_spine": [
+          "docs/policies/operations/OPERATIONS_POLICY/PP_OPS_PROTOCOL_POL_JOB_PIPELINE_AUTHORITY_AND_EXECUTION_ARTIFACTS_20260312.md",
+          "docs/operations/ssot/JOBS_AND_EXECUTION_SSOT.md",
+          "operations/tasks.json"
+        ],
+        "containment_rules": [
+          "This frame maps live substrate and compatibility only; do not mutate implementation yet.",
+          "Anchor every compatibility claim to a concrete file or test surface.",
+          "Preserve the distinction between canonical future routes and temporary alias surfaces."
+        ],
+        "drift_prevention_rules": [
+          "Do not invent duplicate storage, report, or signing flows when reusable substrate already exists.",
+          "Do not widen the lane into silent-integration or observer migration work.",
+          "Do not narrow compatibility expectations without evidence from current code and tests."
+        ],
+        "micro_plan_rule": "Generate a micro-plan immediately before this frame becomes active; future-frame micro-plans remain unadmitted."
+      },
+      "governance_reminders": [
+        "Reconfirm authority spine before mutating frame state.",
+        "Capture explicit evidence pointers for every status-changing action.",
+        "Record clear next-action intent before frame advance."
+      ],
+      "micro_plan_admitted": true,
+      "micro_frames_admitted": false,
+      "micro_plan_contract": {
+        "allowed": true,
+        "admission_rule": "active-frame-only",
+        "required_sections_when_admitted": [
+          "title",
+          "status",
+          "grounded_authority_basis",
+          "frozen_execution_order",
+          "interpretation_rules",
+          "target_outputs",
+          "validation_slice",
+          "explicit_non_goals",
+          "completion_criteria",
+          "deferral_boundaries"
+        ]
+      },
+      "micro_plan": {
+        "title": "qf2 live substrate and compatibility map",
+        "status": "completed",
+        "grounded_authority_basis": [
+          "qf2 evidence routes explicitly point to cli.py, api.py, projects.py, runner.py, reports.py, signing.py, catalog.py, layout.py, render.py, and tests/test_cli.py.",
+          "The current command-family shape must be derived from the live implementation rather than from proposal shorthand.",
+          "Compatibility obligations are constrained by what the retained-evidence core already does and by what tests currently assert."
+        ],
+        "frozen_execution_order": [
+          "Read current CLI route registration and dispatch.",
+          "Read reusable project/run/report/signing/catalog/layout/render substrate modules.",
+          "Read CLI tests to identify compatibility-locking assertions.",
+          "Classify likely mutation surfaces versus reusable retained-evidence core."
+        ],
+        "interpretation_rules": [
+          "Prefer reuse of runner/report/signing/project primitives over inventing duplicate storage or evidence flows.",
+          "Treat current nested `calamum test project`, `runs`, and `reports` routes as compatibility surfaces, not the long-term canonical top-level grammar.",
+          "Use existing CLI tests as hard evidence for compatibility expectations rather than assuming them."
+        ],
+        "target_outputs": [
+          "Live CLI route-tree map.",
+          "Reusable substrate inventory.",
+          "Compatibility/alias surface inventory.",
+          "Likely mutation surface boundary for later implementation frames."
+        ],
+        "validation_slice": [
+          "Direct file readback of substrate modules.",
+          "Direct file readback of tests/test_cli.py.",
+          "Scratchpad execution note preserved for later audit readback."
+        ],
+        "explicit_non_goals": [
+          "Do not redesign the retained-evidence core during qf2.",
+          "Do not treat current nested `test` routes as proof that future top-level expansion requires duplicate backend/storage logic.",
+          "Do not infer monitor implementation details before qf4."
+        ],
+        "completion_criteria": [
+          "Top-level versus nested route shape recorded.",
+          "Reusable substrate modules identified.",
+          "Compatibility tests/surfaces identified.",
+          "Likely mutation surface bounded."
+        ],
+        "deferral_boundaries": [
+          "Project evidence contract detail belongs to qf3.",
+          "Monitor grammar/readiness schema detail belongs to qf4.",
+          "First implementation slice selection belongs to qf6."
+        ]
+      }
+    },
+    {
+      "frame_id": "qf3",
+      "title": "Project evidence architecture and retention contract",
+      "execution_order": 3,
+      "status": "completed",
+      "tasks": [
+        "Define the minimum viable `calamum project` and `calamum project evidence` grammar needed for this lane, including `project set`, `project clear`, and the first retained-evidence verbs.",
+        "Map existing retained run and report artifacts onto future evidence references, manifests, checksums, receipts, and optional signatures.",
+        "Freeze which evidence operations are in the first slice versus explicitly deferred (`verify`, `bundle`, `export`, `index`, or richer session families where needed).",
+        "Define publishable/local-only boundaries, path-redaction expectations, and project-relative review/open flows for human-facing surfaces.",
+        "Document compatibility aliases from current `calamum test runs/reports/project` behavior into future canonical routes."
+      ],
+      "goal": "Define the canonical project-scoped evidence route, retained artifact contract, and compatibility posture for runs, sessions, reports, verification, export, and aggregate review.",
+      "why_this_frame_exists": "Project evidence is the backbone that lets Calamum grow beyond `calamum test` without losing retained evidence discipline. This frame prevents later implementation from collapsing into ad hoc report routing or evidence duplication.",
+      "current_execution_state": "pending",
+      "next_action": "Freeze the minimum viable `calamum project evidence` surface, map it onto current retained artifacts, and document what stays canonical versus deferred.",
+      "notes": "Favor the lowest-risk first slice: evidence routes that reuse existing run/report/signing roots and preserve compatibility aliases from nested `test` routes.",
+      "execution_plan": "",
+      "results": "",
+      "interpretation": "",
+      "scenario_focus": [
+        "project set/clear ergonomics",
+        "project-scoped evidence review",
+        "retained artifact reuse",
+        "local-only versus publishable evidence boundaries"
+      ],
+      "realignment_reminders": [
+        "Evidence is project-scoped; do not flatten it into a route that ignores project context.",
+        "Reuse manifests, checksums, receipts, and signing helpers already present in the substrate.",
+        "Prefer explicit deferments over quietly overcommitting a first implementation slice."
+      ],
+      "exit_criteria": [
+        "The minimum viable `project` and `project evidence` contract is explicit and bounded.",
+        "Evidence packet fields and storage/review routes are mapped to existing Calamum retention substrate.",
+        "Compatibility, local-only, and publishable-boundary rules are documented clearly enough for implementation handoff."
+      ],
+      "evidence_routes": [
+        "projects/calamum/README.md",
+        "projects/calamum/SECURITY.md",
+        "projects/calamum/src/calamum/projects.py",
+        "projects/calamum/src/calamum/runner.py",
+        "projects/calamum/src/calamum/reports.py",
+        "projects/calamum/src/calamum/signing.py",
+        "projects/calamum/src/calamum/layout.py",
+        "projects/calamum/src/calamum/render.py"
+      ],
+      "test_candidate_scan": {
+        "pytest": [
+          "Evidence-route tests for run/report listing and show behavior under canonical versus alias paths.",
+          "Signing/checksum tests for retained artifact verification behavior.",
+          "Project state tests covering explicit project selection and default active-project behavior."
+        ],
+        "sandbox_test": [
+          "CLI help and JSON probes for `project`, `project evidence`, and compatibility aliases.",
+          "Generated output probes ensuring evidence references point into existing retained roots without path escape."
+        ],
+        "empirical_test": [
+          "Manual review of evidence packet fields for secrets, absolute-path leakage, and signing/checksum expectations.",
+          "Manual proof that proposed canonical routes can open existing retained artifacts without duplicating storage logic."
+        ]
+      },
+      "validation_summary": {
+        "pytest": {
+          "status": "deferred",
+          "note": "Evidence-route validation is declared here and executed only after the first mutation slice is admitted.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "sandbox_test": {
+          "status": "deferred",
+          "note": "CLI and retained-output probes are planned for post-mutation validation.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "empirical_test": {
+          "status": "deferred",
+          "note": "Security and publication-boundary review is a declared later validation lane.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        }
+      },
+      "governance_block": {
+        "authority_spine": [
+          "docs/policies/operations/OPERATIONS_POLICY/PP_OPS_PROTOCOL_POL_JOB_PIPELINE_AUTHORITY_AND_EXECUTION_ARTIFACTS_20260312.md",
+          "docs/operations/ssot/JOBS_AND_EXECUTION_SSOT.md",
+          "operations/tasks.json"
+        ],
+        "containment_rules": [
+          "Define evidence routing and retention contracts; do not implement them in this frame.",
+          "Keep project context, evidence retention, and aggregate review tied to existing substrate and security posture.",
+          "Do not imply that deferred evidence verbs are already in-scope for the first mutation slice unless explicitly selected later."
+        ],
+        "drift_prevention_rules": [
+          "Do not create a top-level evidence grammar that conflicts with the accepted project-scoped route without explicit reapproval.",
+          "Do not weaken local-only/publication boundaries to make command naming easier.",
+          "Do not treat Markdown summaries as authority over retained JSON artifacts and manifests."
+        ],
+        "micro_plan_rule": "Generate a micro-plan immediately before this frame becomes active; future-frame micro-plans remain unadmitted."
+      },
+      "governance_reminders": [
+        "Reconfirm authority spine before mutating frame state.",
+        "Capture explicit evidence pointers for every status-changing action.",
+        "Record clear next-action intent before frame advance."
+      ],
+      "micro_plan_admitted": false,
+      "micro_frames_admitted": false,
+      "micro_plan_contract": {
+        "allowed": true,
+        "admission_rule": "active-frame-only",
+        "required_sections_when_admitted": [
+          "title",
+          "status",
+          "grounded_authority_basis",
+          "frozen_execution_order",
+          "interpretation_rules",
+          "target_outputs",
+          "validation_slice",
+          "explicit_non_goals",
+          "completion_criteria",
+          "deferral_boundaries"
+        ]
+      }
+    },
+    {
+      "frame_id": "qf4",
+      "title": "Monitor shell, presets, and readiness/no go contract",
+      "execution_order": 4,
+      "status": "completed",
+      "tasks": [
+        "Freeze the top-level `monitor` grammar and minimum viable subgroups (`pnp`, `pcap`, `session`, and any capability/readiness readback needed for diagnostics).",
+        "Define the preset/pattern vocabulary, required preset fields, local overlay expectations, and the exact role of `--pattern` versus tracked presets.",
+        "Define the automated readiness/no-go packet shape, including project resolution, backend capability discovery, privilege status, decision/result fields, and retry guidance.",
+        "Map retained monitor-session evidence fields onto the same manifest/checksum/signature conventions used by current test/report substrate.",
+        "Record the explicit rule that backend tool names may appear in retained metadata and diagnostics but not as primary operator command families."
+      ],
+      "goal": "Freeze the canonical `calamum monitor` surface, preset vocabulary, readiness/no-go packet contract, and hidden adapter boundary needed for native monitoring without operator-facing backend drift.",
+      "why_this_frame_exists": "Monitor scaffolding is the piece that blocks downstream Vulcan evidence work. This frame turns the proposal into an implementable monitor contract before any adapter or CLI mutation begins.",
+      "current_execution_state": "pending",
+      "next_action": "Define the minimum viable monitor groups, preset ids, readiness packet fields, and `--json` noninteractive behavior while keeping backend tooling names internal.",
+      "notes": "The target is a Calamum-native monitor shell with evidence-rich fail-closed behavior, not a thin wrapper that exposes PyShark/TShark/USBPcap directly to operators.",
+      "execution_plan": "",
+      "results": "",
+      "interpretation": "",
+      "scenario_focus": [
+        "monitor shell grammar",
+        "preset/pattern model",
+        "readiness/no-go packets",
+        "`--json` noninteractive behavior",
+        "hidden backend-adapter boundary"
+      ],
+      "realignment_reminders": [
+        "Automated gates belong inside native monitor commands; do not require separate operator preflight rituals for ordinary flows.",
+        "`--json` is the canonical noninteractive trigger and must emit no-prompt go/no-go packets.",
+        "Do not assume PyShark alone proves live capture readiness; system backends remain separate readiness evidence."
+      ],
+      "exit_criteria": [
+        "The minimum viable `monitor` contract is explicit and bounded.",
+        "Preset, readiness, and evidence-packet schema expectations are frozen for implementation handoff.",
+        "The adapter boundary is defined well enough to keep backend names out of primary operator grammar."
+      ],
+      "evidence_routes": [
+        "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/CALAMUM_MONITOR_EVIDENCE_ARCHITECTURE_PROPOSAL_20260501.md",
+        "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/CALAMUM_MONITOR_EVIDENCE_ARCHITECTURE_SCRATCHPAD_20260501.md",
+        "projects/calamum/README.md",
+        "projects/calamum/SECURITY.md",
+        "projects/calamum/src/calamum/api.py",
+        "projects/calamum/src/calamum/projects.py",
+        "projects/calamum/src/calamum/signing.py"
+      ],
+      "test_candidate_scan": {
+        "pytest": [
+          "Future parser tests for `monitor` command families and preset vocabulary validation.",
+          "Future readiness-packet tests for missing dependencies, unsupported platform, or insufficient privileges.",
+          "Future evidence-packet tests for retained session metadata and checksum/signature behavior."
+        ],
+        "sandbox_test": [
+          "CLI help and JSON probes for `monitor`, `monitor pnp`, `monitor pcap`, and `monitor session`.",
+          "No-prompt failure probes showing `--json` emits structured go/no-go packets rather than interactive prompts."
+        ],
+        "empirical_test": [
+          "Manual architecture review proving backend tool names remain internal while readiness evidence stays explicit.",
+          "Manual review of no-go packet fields for clarity, operator next steps, and publishable/local-only hygiene."
+        ]
+      },
+      "validation_summary": {
+        "pytest": {
+          "status": "deferred",
+          "note": "Monitor-contract tests are declared here and executed after implementation work begins.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "sandbox_test": {
+          "status": "deferred",
+          "note": "Help and no-go JSON probes remain future validation lanes.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "empirical_test": {
+          "status": "deferred",
+          "note": "Architecture and packet-quality review is declared for later execution.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        }
+      },
+      "governance_block": {
+        "authority_spine": [
+          "docs/policies/operations/OPERATIONS_POLICY/PP_OPS_PROTOCOL_POL_JOB_PIPELINE_AUTHORITY_AND_EXECUTION_ARTIFACTS_20260312.md",
+          "docs/operations/ssot/JOBS_AND_EXECUTION_SSOT.md",
+          "operations/tasks.json"
+        ],
+        "containment_rules": [
+          "Freeze monitor contracts and packet shapes; do not run live capture or hardware-facing probes in this frame.",
+          "Treat automated readiness gates as native command behavior, not separate user-facing command families.",
+          "Keep adapter/backend implementation detail subordinate to Calamum-native operator grammar."
+        ],
+        "drift_prevention_rules": [
+          "Do not infer daemonization, scheduling, or trust-management v3 features unless explicitly added to the active lane.",
+          "Do not overstate capture readiness from Python package presence alone.",
+          "Do not turn troubleshooting escape hatches into canonical operator instructions."
+        ],
+        "micro_plan_rule": "Generate a micro-plan immediately before this frame becomes active; future-frame micro-plans remain unadmitted."
+      },
+      "governance_reminders": [
+        "Reconfirm authority spine before mutating frame state.",
+        "Capture explicit evidence pointers for every status-changing action.",
+        "Record clear next-action intent before frame advance."
+      ],
+      "micro_plan_admitted": false,
+      "micro_frames_admitted": false,
+      "micro_plan_contract": {
+        "allowed": true,
+        "admission_rule": "active-frame-only",
+        "required_sections_when_admitted": [
+          "title",
+          "status",
+          "grounded_authority_basis",
+          "frozen_execution_order",
+          "interpretation_rules",
+          "target_outputs",
+          "validation_slice",
+          "explicit_non_goals",
+          "completion_criteria",
+          "deferral_boundaries"
+        ]
+      }
+    },
+    {
+      "frame_id": "qf5",
+      "title": "Downstream Vulcan consumer mapping and adapter boundary",
+      "execution_order": 5,
+      "status": "completed",
+      "tasks": [
+        "Map `run_gui_pit_continuous_monitor.py`, `run_pit_transport_diagnostic.py`, and `run_gui_pit_evidence_session.py` into future Calamum-native `monitor` groups, presets, and evidence outputs.",
+        "Record which retained evidence fields, readiness packets, and session outputs Vulcan actually needs for PIT/S3 remediation and approval-grade readback.",
+        "Freeze the explicit downstream unblock contract: what native Calamum monitor/project-evidence capability must exist before Vulcan should resume.",
+        "Separate consumer-only requirements from reusable Calamum core substrate so Vulcan-specific behavior does not pollute generic monitor design.",
+        "Document any still-open risks (wrong-interface binding, transport nonconvergence, live capture sensitivity) as consumer constraints rather than Calamum identity."
+      ],
+      "goal": "Translate the current Vulcan PIT/S3 monitor scripts and blocker posture into Calamum-native consumer requirements, preset candidates, and explicit unblock criteria without letting downstream consumer behavior redefine Calamum authority.",
+      "why_this_frame_exists": "Vulcan is the clearest downstream consumer, but it is blocked today. This frame captures the exact consumer needs Calamum must satisfy while preventing the job from drifting into a Vulcan-owned identity or script-first command surface.",
+      "current_execution_state": "pending",
+      "next_action": "Map each current Vulcan script to a future native monitor/session route, record the blocker evidence it depends on, and freeze what Calamum must emit before Vulcan can be unblocked.",
+      "notes": "Treat Vulcan as a downstream consumer scenario. Do not reopen blocked Vulcan execution work inside this standalone Calamum planning lane.",
+      "execution_plan": "",
+      "results": "",
+      "interpretation": "",
+      "scenario_focus": [
+        "Vulcan PIT/S3 consumer needs",
+        "preset/adaptor mapping",
+        "downstream unblock criteria",
+        "consumer-only versus core-substrate boundaries"
+      ],
+      "realignment_reminders": [
+        "Vulcan is not the authority surface for this job; it is a downstream consumer requirement source.",
+        "Keep live PIT/S3 capture and hardware-facing action out of this planning frame.",
+        "Use downstream behavior references to define acceptance needs, not command-family ownership."
+      ],
+      "exit_criteria": [
+        "Each relevant Vulcan script has a mapped future Calamum-native route or an explicit deferment.",
+        "The downstream unblock contract is explicit enough to prevent premature Vulcan reruns.",
+        "Consumer-specific requirements are separated cleanly from standalone Calamum command authority."
+      ],
+      "evidence_routes": [
+        "projects/calamum-vulcan/tools/run_gui_pit_continuous_monitor.py",
+        "projects/calamum-vulcan/tools/run_pit_transport_diagnostic.py",
+        "projects/calamum-vulcan/tools/run_gui_pit_evidence_session.py",
+        "operations/tasks.json",
+        "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/CALAMUM_MONITOR_EVIDENCE_ARCHITECTURE_PROPOSAL_20260501.md"
+      ],
+      "test_candidate_scan": {
+        "pytest": [
+          "Future fixture-based parity tests for Vulcan monitor/session pattern mapping.",
+          "Future tests proving downstream wrappers or adapters keep user-facing invocation Calamum-native."
+        ],
+        "sandbox_test": [
+          "Future JSON session/report probes showing Vulcan-facing evidence can be retrieved through Calamum-native surfaces.",
+          "Future compatibility probes for thin transition wrappers, if any remain during migration."
+        ],
+        "empirical_test": [
+          "Conceptual replay of the Vulcan GUI PIT evidence session against proposed native monitor/session flow without live capture.",
+          "Manual review of whether the mapped evidence outputs satisfy the current blocked-lane diagnostic needs."
+        ]
+      },
+      "validation_summary": {
+        "pytest": {
+          "status": "deferred",
+          "note": "Downstream parity tests are declared but remain deferred until native routes exist.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "sandbox_test": {
+          "status": "deferred",
+          "note": "Session/report probes remain future validation work after implementation.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "empirical_test": {
+          "status": "deferred",
+          "note": "Conceptual replay is planned once the native contract is formalized in-frame.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        }
+      },
+      "governance_block": {
+        "authority_spine": [
+          "docs/policies/operations/OPERATIONS_POLICY/PP_OPS_PROTOCOL_POL_JOB_PIPELINE_AUTHORITY_AND_EXECUTION_ARTIFACTS_20260312.md",
+          "docs/operations/ssot/JOBS_AND_EXECUTION_SSOT.md",
+          "operations/tasks.json"
+        ],
+        "containment_rules": [
+          "Use Vulcan scripts and blockers as downstream requirement evidence only; do not treat them as primary command authority.",
+          "Do not resume blocked Vulcan live-capture or remediation work from this frame.",
+          "Keep consumer mapping focused on acceptance requirements and boundary definitions."
+        ],
+        "drift_prevention_rules": [
+          "Do not reclassify this standalone Calamum job as a Vulcan job.",
+          "Do not let a single downstream consumer force generic Calamum command grammar to become script-shaped.",
+          "Do not claim downstream unblock is satisfied until the native Calamum route can retain the required evidence packet."
+        ],
+        "micro_plan_rule": "Generate a micro-plan immediately before this frame becomes active; future-frame micro-plans remain unadmitted."
+      },
+      "governance_reminders": [
+        "Reconfirm authority spine before mutating frame state.",
+        "Capture explicit evidence pointers for every status-changing action.",
+        "Record clear next-action intent before frame advance."
+      ],
+      "micro_plan_admitted": false,
+      "micro_frames_admitted": false,
+      "micro_plan_contract": {
+        "allowed": true,
+        "admission_rule": "active-frame-only",
+        "required_sections_when_admitted": [
+          "title",
+          "status",
+          "grounded_authority_basis",
+          "frozen_execution_order",
+          "interpretation_rules",
+          "target_outputs",
+          "validation_slice",
+          "explicit_non_goals",
+          "completion_criteria",
+          "deferral_boundaries"
+        ]
+      }
+    },
+    {
+      "frame_id": "qf6",
+      "title": "Minimum viable implementation slice and validation plan",
+      "execution_order": 6,
+      "status": "completed",
+      "tasks": [
+        "Compare candidate first slices and select the lowest-risk route that materially advances native `project`/`monitor` scaffolding without breaking current `calamum test` behavior.",
+        "Freeze the exact file-mutation order for the chosen slice, including code, tests, and any required README/SECURITY adjustments.",
+        "Define the consolidated `calamum test` validation plan across pytest, sandbox, and empirical lanes, including alias parity, JSON/no-go packets, and retained-evidence review.",
+        "Record any explicit deferments or override-sensitive validations so later implementation work does not hide them.",
+        "Document what downstream unblock evidence the first slice can satisfy immediately versus what remains for later follow-on work."
+      ],
+      "goal": "Select the first bounded implementation slice, exact file-mutation order, and consolidated `calamum test` validation matrix needed to execute the accepted monitor/project-evidence expansion safely.",
+      "why_this_frame_exists": "Earlier frames establish contracts; this frame converts them into an execution-ready mutation and validation packet so the eventual implementation work has explicit file scope, compatibility obligations, and evidence requirements.",
+      "current_execution_state": "pending",
+      "next_action": "Choose the minimum viable first slice, freeze the file-level mutation order, and define the exact `calamum test`-orchestrated validation lanes that must accompany that slice.",
+      "notes": "The likely first slice is top-level `project` plus the first `project evidence` routes, `project set`/`project clear`, and a monitor command shell/readiness skeleton, but the frame must prove that choice against the compatibility matrix before locking it.",
+      "execution_plan": "",
+      "results": "",
+      "interpretation": "",
+      "scenario_focus": [
+        "first mutation slice selection",
+        "file-level mutation order",
+        "`calamum test` validation matrix",
+        "explicit deferments and follow-ons"
+      ],
+      "realignment_reminders": [
+        "All code-change validation in this repo routes through `calamum test`; narrower pytest is supplemental evidence only.",
+        "Choose the smallest slice that proves the architecture without reopening command-shape debates.",
+        "Write down deferments explicitly rather than silently carrying them into implementation."
+      ],
+      "exit_criteria": [
+        "A first implementation slice is selected with explicit rationale and non-goals.",
+        "The exact mutation file set and validation matrix are frozen.",
+        "Deferred work and downstream-unblock boundaries are explicit enough to guide the next execution lane safely."
+      ],
+      "evidence_routes": [
+        "projects/calamum/src/calamum/cli.py",
+        "projects/calamum/src/calamum/api.py",
+        "projects/calamum/src/calamum/projects.py",
+        "projects/calamum/src/calamum/runner.py",
+        "projects/calamum/src/calamum/reports.py",
+        "projects/calamum/tests/test_cli.py",
+        "projects/calamum/README.md",
+        "projects/calamum/SECURITY.md"
+      ],
+      "test_candidate_scan": {
+        "pytest": [
+          "CLI route tests for canonical and alias command families in the chosen first slice.",
+          "Project/evidence state tests and retained-artifact verification tests touched by the slice.",
+          "Monitor shell/readiness packet tests if the slice includes monitor scaffolding."
+        ],
+        "sandbox_test": [
+          "End-to-end CLI help, JSON, and retained-output probes covering the chosen canonical routes and legacy aliases.",
+          "Path-containment and generated-artifact layout probes for any new retained-evidence surfaces."
+        ],
+        "empirical_test": [
+          "Manual review of regenerated docs and retained artifact packets after the chosen slice is implemented.",
+          "Manual security review of no-go packets, evidence fields, and local-only/publication boundaries."
+        ]
+      },
+      "validation_summary": {
+        "pytest": {
+          "status": "deferred",
+          "note": "This frame freezes the validation matrix; execution remains deferred until implementation begins.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "sandbox_test": {
+          "status": "deferred",
+          "note": "Sandbox probes are selected here and executed after the chosen slice lands.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "empirical_test": {
+          "status": "deferred",
+          "note": "Empirical review remains a declared future validation requirement.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        }
+      },
+      "governance_block": {
+        "authority_spine": [
+          "docs/policies/operations/OPERATIONS_POLICY/PP_OPS_PROTOCOL_POL_JOB_PIPELINE_AUTHORITY_AND_EXECUTION_ARTIFACTS_20260312.md",
+          "docs/operations/ssot/JOBS_AND_EXECUTION_SSOT.md",
+          "operations/tasks.json"
+        ],
+        "containment_rules": [
+          "This frame selects and freezes the implementation slice and validation plan; it does not execute mutation itself.",
+          "Route validation obligations through `calamum test` and record explicit deferments for anything not in the first slice.",
+          "Do not expand the file set beyond what the compatibility and contract frames justify."
+        ],
+        "drift_prevention_rules": [
+          "Do not let attractive later-phase ideas inflate the first slice beyond the minimum viable route.",
+          "Do not mark a validation lane optional unless there is a documented override path.",
+          "Do not claim downstream unblock for capabilities the chosen slice does not actually provide."
+        ],
+        "micro_plan_rule": "Generate a micro-plan immediately before this frame becomes active; future-frame micro-plans remain unadmitted."
+      },
+      "governance_reminders": [
+        "Reconfirm authority spine before mutating frame state.",
+        "Capture explicit evidence pointers for every status-changing action.",
+        "Record clear next-action intent before frame advance."
+      ],
+      "micro_plan_admitted": false,
+      "micro_frames_admitted": false,
+      "micro_plan_contract": {
+        "allowed": true,
+        "admission_rule": "active-frame-only",
+        "required_sections_when_admitted": [
+          "title",
+          "status",
+          "grounded_authority_basis",
+          "frozen_execution_order",
+          "interpretation_rules",
+          "target_outputs",
+          "validation_slice",
+          "explicit_non_goals",
+          "completion_criteria",
+          "deferral_boundaries"
+        ]
+      }
+    },
+    {
+      "frame_id": "qf7",
+      "title": "Execution ready handoff and downstream unblock packet",
+      "execution_order": 7,
+      "status": "completed",
+      "tasks": [
+        "Verify that each preceding frame produced the required authority lock, compatibility map, evidence/monitor contracts, consumer mapping, and first-slice validation plan.",
+        "Regenerate `JOB.md` canonically from the final `JOB.json` state and confirm the reader projection matches the machine-readable scaffold.",
+        "Write the explicit implementation handoff packet: chosen slice, exact mutation files, validation matrix, deferments, and downstream unblock criteria.",
+        "Record remaining risks and boundary conditions, including anything that still prevents Vulcan from resuming or prevents live capture from becoming in-scope.",
+        "Prepare the lane for the next start/admission step without performing job close or claiming completed implementation."
+      ],
+      "goal": "Package the completed planning outputs into a clean execution-ready handoff that can drive implementation without placeholder drift, authority confusion, or premature claims that downstream Vulcan blockers are already resolved.",
+      "why_this_frame_exists": "A planning job of this size needs an explicit finish line. This frame turns the prior contract and slice work into a handoff packet that is safe for `codesentinel job start` execution, safe for derived-doc regeneration, and honest about what remains blocked or deferred.",
+      "current_execution_state": "Frame qf7 completed; all declared frames are processed and the task close is committed.",
+      "next_action": "Completed; no further frame action is currently registered.",
+      "notes": "This frame is about execution readiness and handoff quality, not lifecycle close. Do not conflate a complete planning packet with operator-approved job closure.",
+      "execution_plan": "",
+      "results": "",
+      "interpretation": "",
+      "scenario_focus": [
+        "execution-ready handoff",
+        "derived-doc regeneration",
+        "explicit blocker/deferment statement",
+        "downstream unblock packet"
+      ],
+      "realignment_reminders": [
+        "Execution-ready is not the same thing as completed or close-ready.",
+        "Derived projections must be regenerated from authoritative machine-readable state.",
+        "Downstream unblock claims require native Calamum capability, not just a pretty plan."
+      ],
+      "exit_criteria": [
+        "The job has a complete, bounded, multi-frame execution scaffold with no placeholder drift.",
+        "The implementation handoff packet is explicit enough to guide mutation without reopening core design questions.",
+        "Regenerated reader projections match the authoritative `JOB.json`.",
+        "Remaining blockers, deferments, and downstream-unblock boundaries are stated plainly."
+      ],
+      "evidence_routes": [
+        "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/JOB.json",
+        "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/JOB.md",
+        "operations/tasks.json",
+        "projects/calamum/jobs/JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502/CALAMUM_MONITOR_EVIDENCE_ARCHITECTURE_PROPOSAL_20260501.md"
+      ],
+      "test_candidate_scan": {
+        "pytest": [
+          "No new pytest is executed in the planning handoff frame; this frame confirms the chosen matrix is complete and traceable."
+        ],
+        "sandbox_test": [
+          "Canonical `JOB.md` regeneration check and any non-mutating help/readback validation needed to confirm scaffolding coherence."
+        ],
+        "empirical_test": [
+          "Manual comparison of the final handoff packet against the authoritative planning corpus and current downstream blocker state."
+        ]
+      },
+      "validation_summary": {
+        "pytest": {
+          "status": "deferred",
+          "note": "This frame confirms the validation matrix rather than executing it.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "sandbox_test": {
+          "status": "deferred",
+          "note": "Reader projection regeneration and coherence checks are the main sandbox-facing outputs for this frame.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        },
+        "empirical_test": {
+          "status": "deferred",
+          "note": "Manual handoff quality review is planned when this frame becomes active.",
+          "evidence_pointer": "",
+          "basis": "pre-start planning scaffold"
+        }
+      },
+      "governance_block": {
+        "authority_spine": [
+          "docs/policies/operations/OPERATIONS_POLICY/PP_OPS_PROTOCOL_POL_JOB_PIPELINE_AUTHORITY_AND_EXECUTION_ARTIFACTS_20260312.md",
+          "docs/operations/ssot/JOBS_AND_EXECUTION_SSOT.md",
+          "operations/tasks.json"
+        ],
+        "containment_rules": [
+          "This frame packages planning outputs and regenerates derived readers; it does not execute implementation or close the job.",
+          "Be explicit about what remains blocked or deferred instead of smoothing it over in summary prose.",
+          "Keep `JOB.md` generation on the canonical refresh-only path from `JOB.json`."
+        ],
+        "drift_prevention_rules": [
+          "Do not treat execution-ready planning as proof that downstream native capability already exists.",
+          "Do not hand-edit derived reader artifacts to compensate for missing machine-readable detail.",
+          "Do not collapse lifecycle close requirements into this handoff frame without explicit operator direction."
+        ],
+        "micro_plan_rule": "Generate a micro-plan immediately before this frame becomes active; future-frame micro-plans remain unadmitted."
+      },
+      "governance_reminders": [
+        "Reconfirm authority spine before mutating frame state.",
+        "Capture explicit evidence pointers for every status-changing action.",
+        "Record clear next-action intent before frame advance."
+      ],
+      "micro_plan_admitted": false,
+      "micro_frames_admitted": false,
+      "micro_plan_contract": {
+        "allowed": true,
+        "admission_rule": "active-frame-only",
+        "required_sections_when_admitted": [
+          "title",
+          "status",
+          "grounded_authority_basis",
+          "frozen_execution_order",
+          "interpretation_rules",
+          "target_outputs",
+          "validation_slice",
+          "explicit_non_goals",
+          "completion_criteria",
+          "deferral_boundaries"
+        ]
+      }
+    }
+  ],
+  "frame_stack_schema_version": "job-frame-stack/v1",
+  "structure_model": {
+    "stack_count": 1,
+    "frame_count": 7,
+    "qf_projection_count": 7,
+    "frame_schema": "rich",
+    "micro_plan_generation_rule": "Generate micro-plans immediately before the active frame executes; do not pre-admit future-frame micro-plans."
+  },
+  "renderer_contract": {
+    "qf_required": true,
+    "section_profile": "rich_qf_v1"
+  },
+  "frame_defaults": {
+    "status_initial_first": "open",
+    "status_initial_rest": "open",
+    "micro_plan_admitted_initial": false,
+    "micro_frames_admitted_initial": false,
+    "focus_start_mode": "null_until_first_advance",
+    "frame_admission_mode": "explicit"
+  }
+}

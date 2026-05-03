@@ -1,10 +1,12 @@
 # Calamum Test
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/joediggidyyy/calamum/main/assets/branding/calamum_logo_color.png" alt="Calamum logo" width="360">
+	<img src="assets/branding/calamum_logo_color.png" alt="Calamum logo" width="360">
 </p>
 
-`Calamum Test` is a standalone, project-aware testing substrate for consolidating `pytest`, `sandbox_test`, and `empirical_test` lanes behind one retained-evidence CLI and Python facade.
+`Calamum Test` is a standalone, project-aware testing harness for consolidating `pytest`, `sandbox_test`, and `empirical_test` lanes behind one retained-evidence CLI and Python facade.
+
+It is built for teams that want test execution, project context, and generated evidence to stay organized, reviewable, and reproducible.
 
 Public repository: `https://github.com/joediggidyyy/calamum`
 
@@ -24,21 +26,21 @@ Important naming note:
 - PyPI package / dependency name: `calamum-test`
 - import package and runtime command: `calamum`
 
-The current implementation is no longer just a seed scaffold. It now includes:
+Package highlights include:
 
 - a shared `.calamum/project.json` descriptor model
-- machine-local overlay and active-project state support
-- a stable importable Python facade in `calamum.api`
-- richer catalog metadata for profiles, tags, policy flags, and evidence requirements
-- retained run manifests and checksums
-- regenerative aggregate reports for `job`, `project`, and `domain` scopes
-- detached-signature support for privileged or publishable aggregate artifacts
+- project-aware resolution for catalog, runs, and reports roots
+- a stable Python facade in `calamum.api`
+- tracked catalog metadata for profiles, tags, policy flags, and evidence requirements
+- retained run manifests, checksums, and per-step output captures
+- aggregate report generation for `job`, `project`, and `domain` scopes
+- optional signing inputs for privileged or publication-oriented report flows
 
 ## Command surface
 
 ### Top-level families
 
-- `calamum test` — validation definition discovery and execution
+- `calamum test` — validation definition discovery, execution, and retained evidence review
 - `calamum project` — project registration, active-project state, and context readback
 - `calamum monitor` — current monitor-shell scaffolding and capability readback
 
@@ -50,15 +52,14 @@ The current implementation is no longer just a seed scaffold. It now includes:
 - `calamum test runs list`
 - `calamum test runs show <run_id>`
 
-A `definition_id` is the exact id of a test definition in the catalog. Use
-`calamum test list` to discover the available ids, then pass one of those ids to
-`calamum test show` or `calamum test run`. Example: `seed-cli-smoke`.
+A `definition_id` is the exact id of a test definition in the catalog. Use `calamum test list` to discover available ids, then pass one of those ids to `calamum test show` or `calamum test run`.
 
-**Progress visibility**: `calamum test run` emits a heartbeat line to stderr every
-20 seconds while a long-running step subprocess is active. This indicates the
-orchestrator is alive and the step is progressing, not stalled. The retained-evidence
-artifacts (`report.json`, `report.md`, `manifest.json`, `checksums.json`) are
-written only after the step completes; heartbeat lines are transient and not stored.
+The catalog currently includes definitions such as:
+
+- `seed-cli-smoke`
+- `seed-adversarial-smoke`
+
+Long-running subprocess steps emit heartbeat lines to `stderr` while a run is active. Those heartbeats are transient status signals; the retained artifacts are written when the run completes.
 
 ### Project management
 
@@ -71,16 +72,13 @@ written only after the step completes; heartbeat lines are transient and not sto
 
 Compatibility note:
 
-- `calamum test project ...` remains available as a compatibility alias during the current route migration.
+- `calamum test project ...` remains available as a compatibility alias for the top-level `project` family.
 
 ### Monitor scaffolding
 
 - `calamum monitor capability list`
 
-Current note:
-
-- the top-level `monitor` family is now present as native Calamum scaffolding for future monitor adapters and readiness surfaces;
-- broader monitor execution families are still a follow-on implementation lane, so current help/runtime output should be treated as the truthful monitor-shell baseline rather than a claim of full capture parity.
+The `monitor` family currently provides capability inspection through `calamum monitor capability list`.
 
 ### Aggregate reporting
 
@@ -92,27 +90,25 @@ Current note:
 
 ## Adding tests to the library
 
-In Calamum, the public "test library" is the tracked catalog at
-`catalog/test_definitions.json`.
+In Calamum, the public test library is the tracked catalog at `catalog/test_definitions.json`.
 
-Current authoring workflow:
+To add a definition:
 
 1. add a new definition object to the catalog `definitions` list
 2. give it a stable `id`, `title`, `summary`, `status`, and `category`
 3. classify it with:
-	- `category` — primary test class (for example `bootstrap`, `regression`, `security`, `adversarial`, `performance`)
-	- `profiles` — reusable bundles such as `smoke`, `release`, or `nightly`
-	- `tags` — cross-cutting labels for search and future selectors
-	- `policy_flags` — execution or governance rules
-	- `evidence_requirements` — retained outputs the definition must produce
+   - `profiles` — reusable bundles such as `smoke`, `release`, or `nightly`
+   - `tags` — cross-cutting labels for search and future selectors
+   - `policy_flags` — execution or governance rules
+   - `evidence_requirements` — retained outputs the definition must produce
 4. declare step arrays under the canonical lanes:
-	- `pytest`
-	- `sandbox_test`
-	- `empirical_test`
+   - `pytest`
+   - `sandbox_test`
+   - `empirical_test`
 5. validate the new entry by running:
-	- `calamum test list`
-	- `calamum test show <definition_id>`
-	- `calamum test run <definition_id> --dry-run`
+   - `calamum test list`
+   - `calamum test show <definition_id>`
+   - `calamum test run <definition_id> --dry-run`
 
 Minimal definition shape:
 
@@ -121,59 +117,57 @@ Minimal definition shape:
 	"id": "adversarial-auth-smoke",
 	"title": "Adversarial auth smoke",
 	"summary": "Challenge the authentication path with hostile-input and retained-evidence checks.",
-  "status": "active",
+	"status": "active",
 	"category": "adversarial",
-  "profiles": ["smoke", "release"],
+	"profiles": ["smoke", "release"],
 	"tags": ["adversarial", "auth", "api", "signing"],
 	"policy_flags": ["containment", "json-first", "project-aware", "release-gate"],
 	"evidence_requirements": ["report_json", "report_md", "manifest_json", "checksums_json"],
-  "default_lanes": ["pytest", "sandbox_test"],
-  "lanes": {
-	 "pytest": [],
-	 "sandbox_test": [],
-	 "empirical_test": []
-  }
+	"default_lanes": ["pytest", "sandbox_test"],
+	"lanes": {
+		"pytest": [],
+		"sandbox_test": [],
+		"empirical_test": []
+	}
 }
 ```
 
-Current limitation: authoring is still manual. Calamum does **not** yet ship a
-dedicated `calamum test catalog scaffold|validate` management surface, so the
-catalog file remains the authoritative place to add new tests today.
+Definitions are currently added directly in `catalog/test_definitions.json`, which remains the authoritative editing surface.
 
-### Plain-language meaning of the fields
+### What the fields mean
 
-- `category` = **what kind of test this is**
-- `profiles` = **when or why you run it**
-- `tags` = **what area it touches**
-- `policy_flags` = **special execution or governance rules**
-- `evidence_requirements` = **which retained outputs must exist after the run**
-- `pytest` / `sandbox_test` / `empirical_test` = **the three execution lane classes inside one definition**
+- `category` = what kind of test this is
+- `profiles` = when or why you run it
+- `tags` = what area it touches
+- `policy_flags` = special execution or governance rules
+- `evidence_requirements` = which retained outputs must exist after the run
+- `pytest` / `sandbox_test` / `empirical_test` = the three execution lane classes inside one definition
 
 The important division is this:
 
-- one **definition** = one named test in the library
-- one definition can use **one, two, or all three lane classes**
-- the lane classes are **not** separate library entries; they are the three ways Calamum can gather evidence for the same test
+- one definition = one named test in the library
+- one definition can use one, two, or all three lane classes
+- the lane classes are not separate library entries; they are the three ways Calamum gathers evidence for the same test
 
 ## Controlled library vocabulary (v1)
 
-Calamum now treats the following values as the contracted v1 vocabulary.
+Calamum treats the following values as the contracted v1 vocabulary.
 
 ### Status values
 
 - `seed` — scaffold or early placeholder definition
 - `active` — supported definition for normal use
 - `experimental` — usable but still being evaluated
-- `deprecated` — still readable/runnable for transition purposes but being retired
+- `deprecated` — still readable or runnable for transition purposes
 - `disabled` — present in the catalog but not intended for ordinary execution
 
 ### Category values
 
-- `adversarial` — deliberate hostile-input, penetration-style, abuse-case, or attack-path validation
-- `general` — mixed or uncategorized definition; use sparingly
-- `bootstrap` — proves basic setup, installation, or command-surface readiness
+- `adversarial` — hostile-input, penetration-style, or abuse-case validation
+- `general` — mixed or uncategorized definition
+- `bootstrap` — setup, installation, or command-surface readiness
 - `regression` — protects a known workflow or behavior from breaking
-- `security` — validates defensive trust, signing, access, or safety posture without making hostile challenge the primary identity
+- `security` — validates defensive trust, signing, access, or safety posture
 - `performance` — validates speed, scale, or resource posture
 - `integration` — validates interaction across modules, services, or host applications
 - `compliance` — validates policy, contract, or governance conformance
@@ -188,30 +182,30 @@ Calamum now treats the following values as the contracted v1 vocabulary.
 
 ### Tag values
 
-- `adversarial` — hostile-input / penetration-testing facet on a definition whose primary category may or may not already be adversarial
-- `aggregate` — aggregate/report generation surface
-- `api` — Python or service API surface
-- `auth` — authentication / authorization surface
-- `catalog` — definition-library / schema surface
-- `cli` — command-line surface
-- `filesystem` — path, layout, or artifact-root surface
-- `project` — project registration / context resolution surface
-- `reporting` — rendered reports or report-regeneration surface
-- `retained-evidence` — manifests, checksums, receipts, or persisted review evidence
-- `sandbox` — isolated or simulated runtime surface
-- `signing` — signatures, receipts, or verification surface
-- `smoke` — broad confidence check spanning multiple surfaces
+- `adversarial`
+- `aggregate`
+- `api`
+- `auth`
+- `catalog`
+- `cli`
+- `filesystem`
+- `project`
+- `reporting`
+- `retained-evidence`
+- `sandbox`
+- `signing`
+- `smoke`
 
 ### Policy flag values
 
-- `json-first` — JSON is the primary machine contract
-- `project-aware` — requires resolved project context or tokens
-- `containment` — paths and execution roots must stay inside declared boundaries
-- `local-only` — intentionally local-only workflow or artifact posture
-- `signed-output` — output must be signed and verifiable
-- `privileged-operation` — delegated or privileged control path
-- `release-gate` — failing result blocks release or promotion
-- `deterministic-output` — output is expected to be stable and reproducible
+- `json-first`
+- `project-aware`
+- `containment`
+- `local-only`
+- `signed-output`
+- `privileged-operation`
+- `release-gate`
+- `deterministic-output`
 
 ### Evidence requirement values
 
@@ -229,21 +223,18 @@ Calamum now treats the following values as the contracted v1 vocabulary.
 
 - `pytest` — automated code-level assertions
 - `sandbox_test` — controlled scripted or simulated execution
-- `empirical_test` — real observed/manual/live verification
+- `empirical_test` — real observed or manual verification
 
 ### How adversarial testing is represented
 
-- use `category: adversarial` when hostile challenge or penetration-style probing is the **primary identity** of the definition
-- use tag `adversarial` when a definition is primarily something else (for example `security` or `regression`) but still contains adversarial coverage
-- keep `adversarial` out of the lane field: it is a **test type**, not an execution medium
-- execute adversarial definitions through one or more of the normal lanes (`pytest`, `sandbox_test`, `empirical_test`)
-- when adversarial coverage is claimed, sandbox coverage should normally be present because that is the safest place to exercise hostile-path probes first
+- use `category: adversarial` when hostile challenge is the primary identity of the definition
+- use tag `adversarial` when a definition is primarily something else but still includes adversarial coverage
+- keep `adversarial` out of the lane field; it is a test type, not an execution medium
+- execute adversarial definitions through one or more of the normal lanes
 
-## Plain-language workflow across all three test classes
+## How the three test classes work together
 
-Here is the simplest way to think about it.
-
-Use **one definition** when you are testing **one real thing**.
+The simplest mental model is: use one definition when you are testing one real thing.
 
 Example definition:
 
@@ -254,21 +245,21 @@ Example definition:
 
 Then split the same test across the three lane classes like this:
 
-1. **`pytest` lane**
-	- prove the code-level rules work
-	- example: token validation, permission checks, malformed-input rejection, JSON packet shape
-2. **`sandbox_test` lane**
-	- prove the command or workflow works in a controlled runtime
-	- example: run the CLI against hostile fixtures in a safe local sandbox and confirm the right files are written without escaping containment
-3. **`empirical_test` lane**
-	- prove the result also holds in a real observed workflow
-	- example: operator checks the real auth flow or a live delegated request/receipt path under adversarial review conditions
+1. `pytest` lane
+   - proves the code-level rules work
+   - example: token validation, permission checks, malformed-input rejection
+2. `sandbox_test` lane
+   - proves the workflow runs correctly in a controlled runtime
+   - example: run the CLI against hostile fixtures in a safe local sandbox
+3. `empirical_test` lane
+   - proves the result still holds in a real observed workflow
+   - example: operator review of a real auth flow or delegated request path
 
-Plain English summary:
+In short:
 
-- `pytest` asks: **does the code logic pass?**
-- `sandbox_test` asks: **does the workflow run correctly in a safe controlled environment?**
-- `empirical_test` asks: **does it still look correct when a human or real-world run observes it?**
+- `pytest` asks: does the code logic pass?
+- `sandbox_test` asks: does the workflow run correctly in a safe controlled environment?
+- `empirical_test` asks: does it still look correct when a human or real-world run observes it?
 
 Typical full workflow:
 
@@ -276,12 +267,10 @@ Typical full workflow:
 2. run `calamum test show adversarial-auth-smoke`
 3. run `calamum test run adversarial-auth-smoke --dry-run`
 4. run `calamum test run adversarial-auth-smoke`
-5. inspect one combined retained evidence pack under:
-	- `.calamum/generated/runs/<run_id>/`
-6. if the run belongs to a job or release lane, generate aggregates under:
-	- `.calamum/generated/reports/generated/`
+5. inspect one combined retained evidence pack under `.calamum/generated/runs/<run_id>/`
+6. if the run belongs to a job or release lane, generate aggregates under `.calamum/generated/reports/generated/`
 
-That is the core model: **one named adversarial or non-adversarial test definition, three possible lane classes, one retained evidence pack.**
+That is the core model: one named test definition, up to three lane classes, and one retained evidence pack.
 
 ## Retained evidence contract
 
@@ -291,7 +280,7 @@ Every `calamum test run` retains:
 - `report.md`
 - `checksums.json`
 - `manifest.json`
-- per-step stdout/stderr captures
+- per-step stdout and stderr captures
 - append-only `.calamum/generated/runs/run_index.jsonl`
 
 Aggregate report generation retains:
@@ -346,36 +335,19 @@ project-root/
 │                 ├─ manifest.json
 │                 ├─ receipt.json
 │                 ├─ *.sha256
-│                 ├─ *.sig                # when signing is enabled
+│                 ├─ *.sig
 │                 └─ history/<timestamp>/
 └─ catalog/
-	 └─ test_definitions.json
+	└─ test_definitions.json
 ```
 
-This is the default contract unless the operator overrides one or more roots during
-project registration or later through local overlay settings / explicit CLI flags.
+### Notes
 
-### Workflow notes
+- the checked-in `.calamum/project.json` points outputs into `.calamum/generated/`
+- `calamum project register` can bootstrap the minimal local scaffold for an adopted repo
+- explicit command flags override descriptor defaults when you intentionally want a different layout
 
-- **Child-repo / self-hosted workflow**: the checked-in `projects/calamum/.calamum/project.json`
-	points generated outputs into `.calamum/generated/`.
-- **Adopt an existing repo**: `calamum test project register` now bootstraps the minimal
-	local scaffold by creating:
-	- `catalog/test_definitions.json` if it does not exist yet
-	- `.calamum/generated/.gitignore`
-	- the standard `runs/` and `reports/` directories under `.calamum/generated/`
-- **Application profile note**: `--application <id>` is currently stored on the project record and exposed to tokens/readback,
-	but it does **not yet** auto-expand a data-driven profile with implied markers, path aliases, or report defaults.
-	For CodeSentinel, pass the explicit registration arguments you want on the first local exercise.
-- **Override workflow**: `--runs-root`, `--reports-root`, `--catalog-root`, and the machine-local
-	overlay still win when the operator intentionally wants a different layout.
-
-If you do not override anything, test reports go to `.calamum/generated/runs/` and
-aggregate reports go to `.calamum/generated/reports/generated/`.
-
-Concrete local-first CodeSentinel workflow notes now live in:
-
-- `planning/CALAMUM_CODESENTINEL_LOCAL_ADOPTION_SCRATCHPAD_20260423.md`
+If you do not override anything, retained test runs go to `.calamum/generated/runs/` and aggregate reports go to `.calamum/generated/reports/generated/`.
 
 ## Project resolution order
 
@@ -386,7 +358,7 @@ Calamum resolves project context in the following order:
 3. `CALAMUM_PROJECT`
 4. active project stored in local state
 
-Within a resolved project, path/runtime resolution follows:
+Within a resolved project, path resolution follows:
 
 1. explicit command flags
 2. machine-local overlay
@@ -399,8 +371,9 @@ From `projects/calamum/`:
 
 1. install in editable mode
 2. validate the default shared descriptor
-3. run the seed smoke definition
-4. generate a project aggregate from retained evidence
+3. list the current seed definitions
+4. run a seed smoke definition
+5. generate a project aggregate from retained evidence
 
 Example flow:
 
@@ -416,39 +389,47 @@ After the sample run, inspect:
 - `.calamum/generated/runs/run_index.jsonl`
 - `.calamum/generated/reports/generated/report_index.jsonl`
 
-If you want to avoid installing the console script during early development, run `python -m calamum ...` from the project root after setting `PYTHONPATH=src` for the session.
-
 ## Signing and privileged flows
 
-Privileged aggregate generation can verify detached requests and emit signed receipts and report artifacts.
+Aggregate generation supports optional signing inputs for privileged or publication-oriented flows.
 
-Relevant local environment variables:
+Relevant environment variables include:
 
 - `CALAMUM_ED25519_PRIVATE_KEY`
 - `CALAMUM_ED25519_PUBLIC_KEY`
 - `CALAMUM_POLICY_SIGNING_KEY`
 - `CALAMUM_CONFIG_ROOT`
 
-For local development, a fallback HMAC or SHA lane is supported. For publishable or cross-application flows, prefer Ed25519.
+The repository also includes `.env.example` with placeholder values for local signing and config setup. Keep real keys and machine-local overrides in ignored local files only.
+
+For local development, unsigned or fallback signature workflows can still be useful. For publishable or cross-application flows, prefer Ed25519-backed signing.
 
 ## Python facade
 
-The package exports a stable surface for host applications via `calamum.api`, including helpers to:
+The package exports a stable Python surface through `calamum.api`, including helpers to:
 
 - resolve or require project context
 - register and validate projects
-- list/show/run definitions
-- list/show retained runs
-- generate/list/show aggregate reports
+- list, show, and run definitions
+- list and inspect retained runs
+- generate, list, and inspect aggregate reports
 
 ## Why this repo exists
 
-This child project adapts the strongest patterns from the earlier Calamum/observer testing surfaces into one reusable testing substrate with a cleaner release boundary.
+Calamum packages a reusable testing substrate that gives projects one consistent place to define tests, execute them across multiple validation lanes, and retain evidence worth reviewing later.
 
-The design goals are:
+Design goals:
 
 - deterministic project-aware execution
 - retained evidence instead of terminal-history dependence
 - JSON-first machine readability with Markdown companions
 - regenerable report surfaces
-- credible privileged/publication security hooks without hardcoding secrets
+- credible signing hooks without hardcoding secrets
+
+## Security
+
+For vulnerability reporting and security guidance, see `SECURITY.md`.
+
+## Contributing
+
+Development and contribution guidance lives in `CONTRIBUTING.md`.

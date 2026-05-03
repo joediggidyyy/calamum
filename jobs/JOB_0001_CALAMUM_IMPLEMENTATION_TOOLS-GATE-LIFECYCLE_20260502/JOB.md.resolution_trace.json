@@ -1,0 +1,437 @@
+{
+  "raw_input": "Calamum monitor scaffolding implementation for native evidence orchestration readiness gates",
+  "normalized_input": "calamum monitor scaffolding implementation for native evidence orchestration readiness gates",
+  "intent_inference_performed": false,
+  "extracted_tokens": {
+    "calamum": 1.0,
+    "monitor": 3.0,
+    "scaffolding": 3.0,
+    "implementation": 1.0,
+    "native": 1.0,
+    "evidence": 2.5,
+    "orchestration": 2.5,
+    "readiness": 2.0,
+    "gates": 1.0
+  },
+  "resolution_context": {
+    "project_id": "calamum",
+    "scope": "project"
+  },
+  "applied_context_priors": [
+    {
+      "source": "project:calamum",
+      "kind": "domain",
+      "value": "tools",
+      "weight": 3.0
+    },
+    {
+      "source": "project_scope:calamum::project::match_rule[0]",
+      "kind": "domain",
+      "value": "tools",
+      "weight": 10.0
+    },
+    {
+      "source": "project_scope:calamum::project::match_rule[0]",
+      "kind": "topic",
+      "value": "gate_lifecycle",
+      "weight": 14.0
+    },
+    {
+      "source": "project_scope:calamum::project::match_rule[0]",
+      "kind": "token",
+      "value": "monitor",
+      "weight": 3.0
+    },
+    {
+      "source": "project_scope:calamum::project::match_rule[0]",
+      "kind": "token",
+      "value": "scaffolding",
+      "weight": 3.0
+    },
+    {
+      "source": "project_scope:calamum::project::match_rule[0]",
+      "kind": "token",
+      "value": "evidence",
+      "weight": 2.5
+    },
+    {
+      "source": "project_scope:calamum::project::match_rule[0]",
+      "kind": "token",
+      "value": "orchestration",
+      "weight": 2.5
+    },
+    {
+      "source": "project_scope:calamum::project::match_rule[0]",
+      "kind": "token",
+      "value": "readiness",
+      "weight": 2.0
+    }
+  ],
+  "top_graph_hits": [
+    {
+      "node_id": "2652b3fa08a7c104522021155be021bf776a71f8d28ee519a96d2313be721c0a",
+      "path": "projects/calamum-moltbook-observer/local_untracked/reports/queststack/QS-CALAMUM-MOLTBOOK-KEYMASTER-RETRIEVAL-READINESS-20260219_evidence.jsonl",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 192.375
+    },
+    {
+      "node_id": "fc51c3bfe54c9a11d3d8229b15ddb44dbdbd559f8c5b7c42ac313e576e0cb81d",
+      "path": "projects/calamum-moltbook-observer/local_untracked/reports/queststack/QS-CALAMUM-MOLTBOOK-KEYSMITH-IMPLEMENTATION-20260212_evidence.jsonl",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 158.625
+    },
+    {
+      "node_id": "d9c0d06552d9b3bf58381a270e2a6148e5c09657f4524455d57066574249443b",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T114913.426846Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "43cde2894d8753b88c85cd0cc92f048e9f4ecb178da21d8987d9d495333a89c2",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T115109.497498Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "580082b79773305ae9de69a74ea3a0be8fc750a985e0fb9871bf02deb8968784",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T165406.345387Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "e4aebb5ab979933741ebbcc4768fe610fd6d8f624f700a79dba6543f890223b4",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T170422.559114Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "ec9db9279fc9067612d1eb2737c68c6485ab5940e5dcf0c2628167dadf3ef527",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T184751.894661Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "bdbf70ce28dc2e92cebae46c74af1690ec6ca8f32f07a3af0a5cf7cbb4d7ff72",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T082334.413463Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "f4f7ab03eb8b7a2849b494b8e0215dc9e2e6c636342137e5c4eea0db82d876f0",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T103036.500614Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "03f730535ce599ffb1c1bac1a8ce99616c84a3f4ca4825336cf084647f134ba4",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T105514.141776Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "cc05120bea4edcd35bceaccfe431dbeba7760b89811a4ba58607d9f69fd7f2ea",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T111532.287439Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "70124b782d6e3fb44bb3c8fc9797ae752cc13ed5c0f780ce1215546fbc4282dd",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T111557.242132Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "833952ebb7fa0e5e74b13abe1b5b00fd0eb7f3980d3fbaad04ad328790b7d8d1",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T114545.993624Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "e8dcc1d03c71555728da743a0d32aa938ee135f2da8d2fec53c40dbcb8bdf985",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T114612.463373Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "cd4d98d3ed0110dde951c11b68b5c96c09bce1df1ce694b51f021284b215a6a3",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260221T235840.626604Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "b47c737e7c1480c9e574e061dacdfbf01835ce7c3da933b7e21c028ef4a760ca",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T024626.291508Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "6bc12e50997cfe0eb375f5da8dda04d0050f803ee42c2f5f3ebb885679f4dc99",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T053328.166980Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "7612dfd561d3d8ee364b94fb75514cdc40d350d25e7b2eac73a074676e28472b",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T054410.747115Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "2f1c3445911f55cb79c89075f8d24d1bc6eb11bf390e3a6948af0502b475da1a",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T054509.812033Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "9dbb27117dde530e736f74b9a1a742d1f45ab227b8f2c682211c3eda76889808",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T055050.414356Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    }
+  ],
+  "dominant_domain": "tools",
+  "dominant_topic": "gate_lifecycle",
+  "candidate_sequences": [
+    "tools.gate_lifecycle"
+  ],
+  "selected_sequence": "tools.gate_lifecycle",
+  "confidence": 0.5,
+  "challenge_triggered": false,
+  "challenge_questions": [],
+  "operator_responses": {},
+  "final_approved_tokens": {
+    "domain": "tools",
+    "topic": "gate_lifecycle"
+  },
+  "final_durable_token": "tools_gate_lifecycle",
+  "evidence_pointers": [
+    "tools/config/jobs/semantic_identifier_composition.json",
+    "projects/calamum-moltbook-observer/local_untracked/reports/queststack/QS-CALAMUM-MOLTBOOK-KEYMASTER-RETRIEVAL-READINESS-20260219_evidence.jsonl",
+    "projects/calamum-moltbook-observer/local_untracked/reports/queststack/QS-CALAMUM-MOLTBOOK-KEYSMITH-IMPLEMENTATION-20260212_evidence.jsonl",
+    "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T114913.426846Z.evidence.json",
+    "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T115109.497498Z.evidence.json",
+    "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T165406.345387Z.evidence.json",
+    "2652b3fa08a7c104522021155be021bf776a71f8d28ee519a96d2313be721c0a",
+    "hub:domain:projects"
+  ],
+  "resolver_version": "1.0",
+  "resolution_id": "d445749e1eee4bc3b9541079a011e5e7",
+  "timestamp_utc": "2026-05-02T00:47:17.787472Z",
+  "resolution_method": "graph_consensus_registry_resolution",
+  "candidate_nodes": [
+    {
+      "node_id": "2652b3fa08a7c104522021155be021bf776a71f8d28ee519a96d2313be721c0a",
+      "path": "projects/calamum-moltbook-observer/local_untracked/reports/queststack/QS-CALAMUM-MOLTBOOK-KEYMASTER-RETRIEVAL-READINESS-20260219_evidence.jsonl",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 192.375
+    },
+    {
+      "node_id": "fc51c3bfe54c9a11d3d8229b15ddb44dbdbd559f8c5b7c42ac313e576e0cb81d",
+      "path": "projects/calamum-moltbook-observer/local_untracked/reports/queststack/QS-CALAMUM-MOLTBOOK-KEYSMITH-IMPLEMENTATION-20260212_evidence.jsonl",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 158.625
+    },
+    {
+      "node_id": "d9c0d06552d9b3bf58381a270e2a6148e5c09657f4524455d57066574249443b",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T114913.426846Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "43cde2894d8753b88c85cd0cc92f048e9f4ecb178da21d8987d9d495333a89c2",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T115109.497498Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "580082b79773305ae9de69a74ea3a0be8fc750a985e0fb9871bf02deb8968784",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T165406.345387Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "e4aebb5ab979933741ebbcc4768fe610fd6d8f624f700a79dba6543f890223b4",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T170422.559114Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "ec9db9279fc9067612d1eb2737c68c6485ab5940e5dcf0c2628167dadf3ef527",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260211T184751.894661Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "bdbf70ce28dc2e92cebae46c74af1690ec6ca8f32f07a3af0a5cf7cbb4d7ff72",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T082334.413463Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "f4f7ab03eb8b7a2849b494b8e0215dc9e2e6c636342137e5c4eea0db82d876f0",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T103036.500614Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "03f730535ce599ffb1c1bac1a8ce99616c84a3f4ca4825336cf084647f134ba4",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T105514.141776Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "cc05120bea4edcd35bceaccfe431dbeba7760b89811a4ba58607d9f69fd7f2ea",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T111532.287439Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "70124b782d6e3fb44bb3c8fc9797ae752cc13ed5c0f780ce1215546fbc4282dd",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T111557.242132Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "833952ebb7fa0e5e74b13abe1b5b00fd0eb7f3980d3fbaad04ad328790b7d8d1",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T114545.993624Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "e8dcc1d03c71555728da743a0d32aa938ee135f2da8d2fec53c40dbcb8bdf985",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260219T114612.463373Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "cd4d98d3ed0110dde951c11b68b5c96c09bce1df1ce694b51f021284b215a6a3",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260221T235840.626604Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "b47c737e7c1480c9e574e061dacdfbf01835ce7c3da933b7e21c028ef4a760ca",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T024626.291508Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "6bc12e50997cfe0eb375f5da8dda04d0050f803ee42c2f5f3ebb885679f4dc99",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T053328.166980Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "7612dfd561d3d8ee364b94fb75514cdc40d350d25e7b2eac73a074676e28472b",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T054410.747115Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "2f1c3445911f55cb79c89075f8d24d1bc6eb11bf390e3a6948af0502b475da1a",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T054509.812033Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    },
+    {
+      "node_id": "9dbb27117dde530e736f74b9a1a742d1f45ab227b8f2c682211c3eda76889808",
+      "path": "projects/calamum-moltbook-observer/local_untracked/audits/implementation_drift/implementation_drift_audit_20260222T055050.414356Z.evidence.json",
+      "kind": "",
+      "exists": true,
+      "tag_string": "projects.calamum-moltbook-observer.general.internal.active.standard.false.none.medium",
+      "score": 136.125
+    }
+  ],
+  "selected_node": "2652b3fa08a7c104522021155be021bf776a71f8d28ee519a96d2313be721c0a",
+  "challenged": false,
+  "challenge_reason": null,
+  "resolved_at": "2026-05-02T00:47:17.787482Z",
+  "vault_tags_index_version": "1.1",
+  "composition_config_version": "1.1",
+  "auto_emit_threshold": 0.75,
+  "challenge_threshold": 0.4,
+  "hit_density_score": 0.0,
+  "association_rank_score": 1.0,
+  "registry_coverage_score": 0.0,
+  "context_alignment_score": 0.2,
+  "schema_version": "1.0",
+  "artifact_path": "C:\\Users\\joedi\\Documents\\CodeSentinel-1\\projects\\calamum\\jobs\\JOB_0001_CALAMUM_IMPLEMENTATION_TOOLS-GATE-LIFECYCLE_20260502\\JOB.md"
+}

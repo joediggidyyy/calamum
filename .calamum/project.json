@@ -1,22 +1,18 @@
 {
-  "schema_version": "calamum-project-v1",
-  "project_id": "calamum-test",
-  "name": "Calamum Test",
-  "root": ".",
   "aliases": [
-    "calamum",
-    "calamum-test"
+    "calamum-test",
+    "calamum"
   ],
-  "domain": "tooling",
   "application": "calamum",
-  "shape": {
-    "kind": "python"
-  },
   "calamum": {
     "catalog_root": "catalog",
-    "runs_root": ".calamum/generated/runs",
+    "default_lanes": [
+      "pytest",
+      "sandbox_test",
+      "empirical_test"
+    ],
+    "path_aliases": {},
     "reports_root": ".calamum/generated/reports",
-    "working_dir": ".",
     "required_markers": [
       "pyproject.toml"
     ],
@@ -25,22 +21,17 @@
       "tests",
       "catalog"
     ],
-    "path_aliases": {
-      "source_root": "src",
-      "tests_root": "tests",
-      "artifacts_root": "dist"
-    },
-    "default_lanes": [
-      "pytest",
-      "sandbox_test",
-      "empirical_test"
-    ],
-    "trusted_requesters": [
-      "calamum",
-      "codesentinel",
-      "observer",
-      "cids"
-    ],
-    "runtime": {}
+    "runs_root": ".calamum/generated/runs",
+    "runtime": {},
+    "trusted_requesters": [],
+    "working_dir": "."
+  },
+  "domain": "tooling",
+  "name": "Calamum",
+  "project_id": "calamum-test",
+  "root": ".",
+  "schema_version": "calamum-project-v1",
+  "shape": {
+    "kind": "python"
   }
 }

@@ -4,7 +4,7 @@
 	<img src="assets/branding/calamum_logo_color.png" alt="Calamum logo" width="220">
 </p>
 
-`Calamum Test` treats retained evidence and privileged aggregate generation as security-relevant surfaces.
+`Calamum Test` includes reporting, signing, and verification features that should be treated as security-relevant surfaces.
 
 ## Reporting a vulnerability
 
@@ -15,14 +15,23 @@ Please report vulnerabilities privately to the maintainers before opening a publ
 - expected vs actual behavior
 - whether signing, delegated requests, or retained evidence integrity is involved
 
+Do not post exploit details, signing material, or sensitive local paths in a public issue first.
+
 ## Security expectations
 
 - never commit secrets, signing keys, or machine-local overlays
 - use environment variables or ignored local files for signing configuration
 - keep `.calamum/project.json` free of secrets and host-specific credentials
 - keep local signing paths and `.env` data out of shared history
-- verify detached signatures before privileged aggregate generation
+- use `.env.example` as a placeholder reference only; replace with local ignored values before testing signing flows
+- verify detached signatures before relying on signed outputs
 - fail closed when verification, allowlist, or containment checks fail
+
+## Release hygiene
+
+- treat `.calamum/generated/`, `runs/`, `reports/`, and local overlays as local-only evidence or machine state unless a workflow explicitly says otherwise
+- review rendered package metadata and `twine check` output before public publication
+- re-check the live CLI help surface after changing command families, signing flows, or retained-output contracts
 
 ## Relevant environment variables
 
@@ -31,4 +40,4 @@ Please report vulnerabilities privately to the maintainers before opening a publ
 - `CALAMUM_POLICY_SIGNING_KEY`
 - `CALAMUM_CONFIG_ROOT`
 
-Development fallback signatures are supported for local use, but publishable or privileged flows should prefer Ed25519.
+For local development, fallback signatures are supported. For release and shared verification workflows, prefer Ed25519.
